@@ -8,6 +8,7 @@
 body {
     font-family: 'Arial', sans-serif;
     line-height: 1.6;
+    overflow-x: hidden;
 }
 
 /* Header and Navigation */
@@ -15,6 +16,10 @@ body {
     background-color: #333;
     color: #fff;
     padding: 1rem 0;
+    position: fixed; 
+    width: 100%; 
+    top: 0; 
+    z-index: 1000; 
 }
 
 .navbar {
@@ -26,6 +31,7 @@ body {
 
 .navbar .logo img {
     max-height: 100px;
+    max-height: 50px;
 }
 
 .navbar-links {
@@ -82,42 +88,196 @@ body {
 
 /* Main Content */
 .main-content {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh; 
-}
-
-
-.slideshow-container {
-    width: 80%; 
-    max-width: 1200px;
-    position: relative;
-    margin: auto;
-}
-
-.slide {
-    display: flex; 
-    justify-content: center;
-    align-items: center;
-    height: 500px; 
-    width: 100%;
-}
-
-.slide img {
-    width: 100%; 
-    height: auto; 
-    object-fit: cover;
-}
-
-.text {
-    color: #fff;
-    background: rgba(0, 0, 0, 0.7);
-    position: absolute;
-    bottom: 20px;
-    left: 20px;
+    margin-top: 60px; 
     padding: 20px;
 }
+
+/* Slideshow Container */
+.slideshow-container {
+    position: relative;
+    margin: auto;
+    overflow: hidden;
+}
+
+.mySlides {
+    display: none;
+}
+
+.mySlides img {
+    width: 100%;
+    display: block;
+}
+
+
+/* Slide Description Text Styling */
+.text {
+    position: absolute;
+    bottom: 60px; 
+    left: 50%;
+    transform: translateX(-50%);
+    color: #fff;
+    text-align: center;
+    padding: 10px 25px;
+    background: rgba(0,0,0,0.5); 
+    border-radius: 4px;
+}
+
+/* Slideshow Navigation Buttons */
+.prev, .next {
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    width: auto;
+    margin-top: -22px;
+    padding: 16px;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+    transition: 0.6s ease;
+    border-radius: 0 3px 3px 0;
+    user-select: none;
+    background-color: rgba(0,0,0,0.8);
+}
+
+/* Position the "next button" to the right */
+.next {
+    right: 0;
+    border-radius: 3px 0 0 3px;
+}
+
+/* Position the "prev button" to the left */
+.prev {
+    left: 0;
+    border-radius: 3px 0 0 3px;
+}
+
+/* Hover effect for navigation buttons */
+.prev:hover, .next:hover {
+    background-color: rgba(0,0,0,1); 
+}
+
+/* Progress dots container */
+.dot-container {
+    text-align: center;
+    padding: 20px;
+    background: #333; 
+}
+
+/* Dot styles */
+.dot {
+    cursor: pointer;
+    height: 15px;
+    width: 15px;
+    margin: 0 2px;
+    background-color: #bbb;
+    border-radius: 50%;
+    display: inline-block;
+    transition: background-color 0.6s ease;
+}
+
+/* Active dot style */
+.active, .dot:hover {
+    background-color: #717171;
+}
+
+.progress-bar {
+    height: 5px;
+    background: #4caf50;
+    width: 0%;
+    position: absolute;
+    bottom: 0;
+}
+
+
+/* Responsive layout adjustments */
+
+@media screen and (max-width: 768px) {
+    .navbar .logo img {
+        max-height: 40px;
+    }
+
+    .navbar-links,
+    .navbar {
+        flex-direction: column;
+    }
+
+    .navbar-links {
+        width: 100%;
+        text-align: center;
+    }
+
+    .navbar a,
+    .dropbtn {
+        display: block;
+        width: 100%;
+        text-align: center; 
+    }
+
+    .dropdown-content {
+        text-align: center;
+    }
+
+    .dropdown-content a {
+        text-align: center; 
+        width: 100%;
+        box-sizing: border-box; 
+    }
+
+    .main-content {
+        margin-top: 120px; 
+    }
+
+    .slideshow-container {
+        width: 100%; 
+    }
+
+    .mySlides img {
+        width: auto; 
+        max-width: 100%;
+        height: auto;
+    }
+
+    .prev,
+    .next {
+        font-size: 14px; 
+        padding: 10px; 
+    }
+
+    .dot-container {
+        padding: 15px; 
+    }
+
+    .dot {
+        margin: 0 5px; 
+    }
+
+    .text {
+        padding: 5px 10px; 
+        font-size: 14px; 
+    }
+
+    .footer-cta .btn-primary {
+        padding: 8px 16px; 
+    }
+}
+
+/* Ensure elements do not exceed the width of the screen */
+html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+/* Add a transition effect for some elements */
+.navbar a,
+.dropbtn,
+.dropdown-content a,
+.btn,
+.dot,
+.fade {
+    transition: all 0.3s ease;
+}
+
+
 
 .btn {
     background: #007bff;
@@ -125,10 +285,6 @@ body {
     padding: 10px 20px;
     text-decoration: none;
     border-radius: 5px;
-}
-
-.btn:hover {
-    background: #0056b3;
 }
 
 /* Footer */
@@ -139,33 +295,18 @@ body {
     padding: 1rem 0;
 }
 
-.footer-nav ul {
-    list-style: none;
-}
-
-.footer-nav ul li {
-    display: inline;
-    margin-right: 20px;
-}
-
-.footer-nav a {
-    color: #fff;
-    text-decoration: none;
-    transition: color 0.3s ease;
-}
-
-.footer-nav a:hover {
-    color: #ddd;
+.footer-cta {
+    padding: 10px;
 }
 
 .footer-cta .btn-primary {
     background: #ff6b6b;
+    padding: 10px 20px;
+    border-radius: 5px;
+    color: white;
+    text-decoration: none;
 }
 
 .footer-cta .btn-primary:hover {
     background: #ff4757;
-}
-
-.footer-cta {
-    padding: 10px;
 }
