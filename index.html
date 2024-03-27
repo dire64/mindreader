@@ -1,14 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MindReader - Your Mental Health Companion</title>
     <link href="styles/index.css" rel="stylesheet" type="text/css">
-    <script src="scripts/index.js" type="text/javascript"></script>
 </head>
-
 <body>
     <header class="site-header">
         <nav class="navbar">
@@ -33,16 +30,27 @@
 
     <main class="main-content">
         <div class="slideshow-container">
-            <!-- Slides with content will go here -->
-            <div class="slide">
-                <img src="images/logo.png" alt="Feature 1">
-                <div class="text">
-                    <h2>Understanding Mental Health</h2>
-                    <p>Description for understanding mental health...</p><br>
-                    <a href="#learn" class="btn">Learn More</a>
-                </div>
+            <div class="mySlides fade">
+                <img src="images/Therapy.jpg" alt="Therapy Session">
+                <div class="text">Therapy Helps</div>
             </div>
-            <!-- Repeat for other slides -->
+            <div class="mySlides fade">
+                <img src="images/Question.jpg" alt="Questionnaire">
+                <div class="text">Discover Your Path</div>
+            </div>
+            <div class="mySlides fade">
+                <img src="images/forum.jpg" alt="Support Forum">
+                <div class="text">Join the Community</div>
+            </div>
+            <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+            <a class="next" onclick="plusSlides(1)">&#10095;</a>
+        </div>
+        <div class="progress-bar"></div>
+        <br>
+        <div class="dot-container">
+            <span class="dot" onclick="currentSlide(1)"></span>
+            <span class="dot" onclick="currentSlide(2)"></span>
+            <span class="dot" onclick="currentSlide(3)"></span>
         </div>
     </main>
 
@@ -52,6 +60,7 @@
             <a href="#emergency" class="btn btn-primary">Find Help Now</a>
         </div>
     </footer>
-</body>
 
+    <script src="scripts/index.js" type="text/javascript"></script>
+</body>
 </html>
