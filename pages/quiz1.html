@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MindReader - How Well Do You Manage Stress?</title>
+    <link rel="stylesheet" href="../styles/quiz1.css" type="text/css">
+</head>
+<body>
+    <header class="site-header">
+        <nav class="navbar">
+            <a href="/" class="logo">
+                <img src="../images/logo.png" alt="MindReader Logo" height="32px"/>
+            </a>
+            <div class="navbar-links">
+                <div class="dropdown">
+                    <button class="dropbtn">Get Help</button>
+                    <div class="dropdown-content">
+                        <a href="/pages/questionnaire.html">Mental Health Test</a>
+                        <a href="/pages/wiki.html">Learn More</a>
+                    </div>
+                </div>
+                <a href="/pages/forum.html">Support Forum</a>
+                <a href="#mission">Our Mission</a>
+                <a href="#emergency">Find Help Now</a>
+                <a href="#signin">Sign In / Sign Up</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="quiz-container">
+            <h2>How Well Do You Manage Stress?</h2>
+            <form id="quizForm">
+                <!-- Quiz questions will be rendered here -->
+            </form>
+            <div id="result" class="result-container"></div>
+        </section>
+    </main>
+
+    <div id="chat-widget">
+        <!-- Chat Button -->
+        <button id="chat-button" onclick="toggleChat()">Chat with us!</button>
+        
+        <!-- Chat Box -->
+        <div id="chat-box" style="display:none;">
+          <div id="chat-box-header">
+            <span>Chat with us!</span>
+            <button onclick="toggleChat()">Close</button>
+          </div>
+          <!--  chat content will be here -->
+        </div>
+      </div>
+
+    <footer class="site-footer">
+        <p>Your Mental Health Companion</p>
+        <div class="footer-cta">
+            <a href="#emergency" class="btn btn-primary">Find Help Now</a>
+        </div>
+    </footer>
+
+    <script src="../scripts/quiz1.js"></script>
+</body>
+
+</html>
