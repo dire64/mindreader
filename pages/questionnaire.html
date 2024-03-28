@@ -58,12 +58,28 @@
         </section>
     </main>
 
+    <div id="chat-widget">
+        <!-- Chat Button -->
+        <button id="chat-button" onclick="toggleChat()">Chat with us!</button>
+        
+        <!-- Chat Box -->
+        <div id="chat-box" style="display:none;">
+          <div id="chat-box-header">
+            <span>Chat with us!</span>
+            <button onclick="toggleChat()">Close</button>
+          </div>
+          <!--  chat content will be here -->
+        </div>
+      </div>
+
     <footer class="site-footer">
         <p>Your Mental Health Companion</p>
         <div class="footer-cta">
             <a href="#emergency" class="btn btn-primary">Find Help Now</a>
         </div>
     </footer>
+
+    <script src="../scripts/questionnaire.js"></script>
 
 </body>
 </html>
