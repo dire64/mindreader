@@ -1,10 +1,18 @@
-/* Forum Page CSS */
-
 /* General Resets */
-/* No changes from your original CSS */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-/* Navigator */
-.navigator {
+body {
+    font-family: 'Arial', sans-serif;
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+/* Header and Navigation */
+.site-header {
     background-color: #333;
     color: #fff;
     padding: 1rem 0;
@@ -14,24 +22,71 @@
     z-index: 1000; 
 }
 
-.navigator a {
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 2rem;
+}
+
+.navbar .logo img {
+    max-height: 100px;
+    max-height: 50px;
+}
+
+.navbar-links {
+    display: flex;
+    align-items: center;
+}
+
+.navbar a {
     color: #fff;
     text-decoration: none;
     padding: 0.5rem 1rem;
     transition: background-color 0.3s ease;
 }
 
-.navigator a.selected {
+.navbar a:hover,
+.dropbtn:hover,
+.dropdown-content a:hover {
     background-color: #555;
 }
 
-/* Header */
-.header {
-    background-color: #007bff;
-    color: #fff;
-    padding: 1rem 0;
-    text-align: center;
+.dropbtn {
+    background-color: #333;
+    color: white;
+    padding: 16px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
 }
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+
 
 /* Main Content */
 main {
@@ -69,14 +124,27 @@ main {
 }
 
 /* Footer */
-footer.forum-footer {
+.site-footer {
     background: #333;
-    color: #fff;
+    color: white;
     text-align: center;
     padding: 1rem 0;
-    position: fixed;
-    bottom: 0;
-    width: 100%;
+}
+
+.footer-cta {
+    padding: 10px;
+}
+
+.footer-cta .btn-primary {
+    background: #ff6b6b;
+    padding: 10px 20px;
+    border-radius: 5px;
+    color: white;
+    text-decoration: none;
+}
+
+.footer-cta .btn-primary:hover {
+    background: #ff4757;
 }
 
 /* Responsive layout adjustments */
