@@ -1,96 +1,70 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Robo Therapist Questionnaire</title>
-<link rel="stylesheet" href="../styles/common.css" type="text/css">
-<link rel="stylesheet" href="../styles/questionnaire.css" type="text/css">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MindReader - Questionnaire</title>
+    <link rel="stylesheet" href="../styles/common.css" type="text/css">
+    <link rel="stylesheet" href="../styles/questionnaire.css" type="text/css">
 </head>
 <body>
-<div class="container">
-<form>
-<h1 class="text-center">Mental Wellbeing Questionnaire</h1>
-<div class="mb-3">
-<label class="form-label">Question 1: How do you rate your current mental well-being?</label>
-<div class="form-check">
-<input class="form-check-input" type="radio" name="mental_wellbeing" id="option1" value="Excellent">
-<label class="form-check-label" for="option1">
-                        Excellent
-</label>
-</div>
-<div class="form-check">
-<input class="form-check-input" type="radio" name="mental_wellbeing" id="option2" value="Good">
-<label class="form-check-label" for="option2">
-                        Good
-</label>
-</div>
-<div class="form-check">
-<input class="form-check-input" type="radio" name="mental_wellbeing" id="option3" value="Fair">
-<label class="form-check-label" for="option3">
-                        Fair
-</label>
-</div>
-<div class="form-check">
-<input class="form-check-input" type="radio" name="mental_wellbeing" id="option4" value="Poor">
-<label class="form-check-label" for="option4">
-                        Poor
-</label>
-</div>
-</div>
-<div class="mb-3">
-<label class="form-label">Question 2: Are you currently experiencing any mental health symptoms?</label>
-<div class="form-check">
-<input class="form-check-input" type="radio" name="mental_health_symptoms" id="symptoms_yes" value="Yes">
-<label class="form-check-label" for="symptoms_yes">
-                        Yes
-</label>
-</div>
-<div class="form-check">
-<input class="form-check-input" type="radio" name="mental_health_symptoms" id="symptoms_no" value="No">
-<label class="form-check-label" for="symptoms_no">
-                        No
-</label>
-</div>
-</div>
-<div class="mb-3">
-<label class="form-label">Question 3: How frequently do you practice self-care activities?</label>
-<div class="form-check">
-<input class="form-check-input" type="radio" name="self_care" id="self_care_daily" value="Daily">
-<label class="form-check-label" for="self_care_daily">
-                        Daily
-</label>
-</div>
-<div class="form-check">
-<input class="form-check-input" type="radio" name="self_care" id="self_care_weekly" value="Weekly">
-<label class="form-check-label" for="self_care_weekly">
-                        Weekly
-</label>
-</div>
-<div class="form-check">
-<input class="form-check-input" type="radio" name="self_care" id="self_care_monthly" value="Monthly">
-<label class="form-check-label" for="self_care_monthly">
-                        Monthly
-</label>
-</div>
-<div class="form-check">
-<input class="form-check-input" type="radio" name="self_care" id="self_care_never" value="Never">
-<label class="form-check-label" for="self_care_never">
-                        Never
-</label>
-</div>
-</div>
-<div class="mb-3">
-<label for="email" class="form-label">Enter your email:</label>
-<input type="email" class="form-control" id="email" name="email">
-</div>
-<button type="submit" class="btn btn-primary">Submit</button>
-</form>
-</div>
-<footer class="ques-footer">
-&copy; Mental Wellbeing Questionnaire. All rights reserved.
-</footer>
+    <header class="site-header">
+        <nav class="navbar">
+            <a href="/" class="logo">
+                <img src="../images/logo.png" alt="MindReader Logo" height="32px"/>
+            </a>
+            <div class="navbar-links">
+                <div class="dropdown">
+                    <button class="dropbtn">Get Help</button>
+                    <div class="dropdown-content">
+                        <a href="/pages/questionnaire.html">Mental Health Test</a>
+                        <a href="/pages/wiki.html">Learn More</a>
+                    </div>
+                </div>
+                <a href="/pages/forum.html">Support Forum</a>
+                <a href="#mission">Our Mission</a>
+                <a href="#emergency">Find Help Now</a>
+                <a href="#signin">Sign In / Sign Up</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="quiz-selection">
+        
+            <div class="quiz-container">
+                <a href="quiz1.html">
+                    <img src="../images/quiz1.jpg" alt="Quiz 1">
+                    <h3>How well do you manage stress?</h3>
+                </a>
+            </div>
+            <div class="quiz-container">
+                <a href="quiz2.html">
+                    <img src="../images/quiz2.jpg" alt="Quiz 2">
+                    <h3>How healthy is your friendship?</h3>
+                </a>
+            </div>
+            <div class="quiz-container">
+                <a href="quiz3.html">
+                    <img src="../images/quiz3.webp" alt="Quiz 3">
+                    <h3>Test your emotional intelligence</h3>
+                </a>
+            </div>
+            <div class="quiz-container">
+                <a href="quiz4.html">
+                    <img src="../images/quiz4.jpg" alt="Quiz 4">
+                    <h3>Do you practice enough self-care?</h3>
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <p>Your Mental Health Companion</p>
+        <div class="footer-cta">
+            <a href="#emergency" class="btn btn-primary">Find Help Now</a>
+        </div>
+    </footer>
+
 </body>
 </html>
