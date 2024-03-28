@@ -1,0 +1,96 @@
+/* Forum Page CSS */
+
+/* General Resets */
+/* No changes from your original CSS */
+
+/* Navigator */
+.navigator {
+    background-color: #333;
+    color: #fff;
+    padding: 1rem 0;
+    position: fixed; 
+    width: 100%; 
+    top: 0; 
+    z-index: 1000; 
+}
+
+.navigator a {
+    color: #fff;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    transition: background-color 0.3s ease;
+}
+
+.navigator a.selected {
+    background-color: #555;
+}
+
+/* Header */
+.header {
+    background-color: #007bff;
+    color: #fff;
+    padding: 1rem 0;
+    text-align: center;
+}
+
+/* Main Content */
+main {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 2rem;
+}
+
+.box {
+    max-width: 600px;
+}
+
+.sidebar {
+    width: 30%;
+    max-width: 300px;
+}
+
+.button {
+    display: block;
+    width: 100%;
+    margin-bottom: 1rem;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.button:hover {
+    background-color: #0056b3;
+}
+
+/* Footer */
+footer.forum-footer {
+    background: #333;
+    color: #fff;
+    text-align: center;
+    padding: 1rem 0;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+/* Responsive layout adjustments */
+@media screen and (max-width: 768px) {
+    main {
+        flex-direction: column;
+    }
+
+    .box {
+        max-width: none;
+    }
+
+    .sidebar {
+        width: 100%;
+        max-width: none;
+    }
+}
