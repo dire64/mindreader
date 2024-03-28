@@ -31,6 +31,23 @@
 <p>Feel free to share your experiences, ask questions, or offer support to others in the community. 
     Let's create a safe and supportive environment together.</p>
 </div>
+<div id="chat-widget-icon" onclick="toggleChatWidget()">
+    Chat with us!
+</div>
+
+<div id="chat-widget">
+    <!-- Chat Button -->
+    <button id="chat-button" onclick="toggleChat()">Chat with us!</button>
+    
+    <!-- Chat Box -->
+    <div id="chat-box" style="display:none;">
+      <div id="chat-box-header">
+        <span>Chat with us!</span>
+        <button onclick="toggleChat()">Close</button>
+      </div>
+      <!--  chat content will be here -->
+    </div>
+  </div>
 <div class="sidebar">
 <button class="button">Reply to a comment</button>
 <button class="button">Add a new comment</button>
