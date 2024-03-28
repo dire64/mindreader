@@ -95,31 +95,33 @@ body {
 /* Slideshow Container */
 .slideshow-container {
     position: relative;
+    width: 100%;
+    max-width: 1200px;
     margin: auto;
     overflow: hidden;
 }
 
 .mySlides {
+    position:relative;
+    width: 100%;
     display: none;
 }
 
 .mySlides img {
     width: 100%;
+    height: auto;
     display: block;
 }
 
 
 /* Slide Description Text Styling */
 .text {
-    position: absolute;
-    bottom: 60px; 
-    left: 50%;
-    transform: translateX(-50%);
+    width: 100%;
     color: #fff;
     text-align: center;
-    padding: 10px 25px;
-    background: rgba(0,0,0,0.5); 
-    border-radius: 4px;
+    padding: 10px;
+    background-color: rgba(0, 0, 0, 0.5);
+    box-sizing: border-box;
 }
 
 /* Slideshow Navigation Buttons */
@@ -127,8 +129,9 @@ body {
     cursor: pointer;
     position: absolute;
     top: 50%;
+    transform: translateY(-50%); 
     width: auto;
-    margin-top: -22px;
+    margin-top: 0; 
     padding: 16px;
     color: white;
     font-weight: bold;
