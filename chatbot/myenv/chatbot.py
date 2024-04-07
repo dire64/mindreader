@@ -8,7 +8,7 @@ from langchain_community.vectorstores import Chroma
 from langchain_openai import OpenAIEmbeddings
 from pydantic import BaseModel, Field
 
-# Load mental health-related content from trusted websites
+# This will load related mental health content from websites related to Mental Health
 urls = [
     "https://www.nimh.nih.gov/health/topics/index.shtml",
     "https://www.psychologytoday.com/us",
@@ -21,24 +21,24 @@ for url in urls:
     data = loader.load()
     docs.extend(data)
 
-# Split the loaded documents into smaller chunks
+# This will help split loaded documents into smaller chunks
 text_splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=0)
 all_splits = text_splitter.split_documents(docs)
 
-# Initialize the chat model
+# We will have to initialize the brain of the chatbot
 chat = ChatOpenAI(model="gpt-3.5-turbo-1106", temperature=0.2, openai_api_key="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")
-# Embed and store the chunks in a vector database
+# Next we will have to embed and store the chunks in a vector database
 vectorstore = Chroma.from_documents(documents=all_splits, embedding=OpenAIEmbeddings(openai_api_key="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"))
 
-# Create a retriever from the initialized vectorstore
+# After that we will create a retriever from the initialized vectorstore
 retriever = vectorstore.as_retriever(k=4)
 
-# Define the response schema
+# Next we will define the response schema
 class MentalHealthResponse(BaseModel):
     advice: str = Field(description="Supportive advice or information related to the user's question")
     resources: list[str] = Field(description="Relevant resources or links for further information")
 
-# Define a prompt template
+# Next we will create a prompt template
 prompt = ChatPromptTemplate.from_messages(
     [
         (
@@ -49,29 +49,29 @@ prompt = ChatPromptTemplate.from_messages(
     ],
 )
 
-# Create a chain by piping the prompt into the model
+# We can then create a chain by piping the prompt into the model
 chain = prompt | chat
 
-# Initialize message history
+# Initializing message history will help keep track of the interaction
 message_history = ChatMessageHistory()
 
 def generate_response(user_input):
-    # Add user message to history
+    # This will add the user messae to the message history
     message_history.add_user_message(user_input)
     
-    # Retrieve relevant documents based on user query
+    # This will help retrieve relevant documents based on user input
     docs = retriever.get_relevant_documents(user_input)
 
-    # Prepare the messages with retrieved documents
+    # This part will prepare the messages with retrieved documents
     messages = message_history.messages + [HumanMessage(content=doc.page_content) for doc in docs]
 
-    # Generate response using the chain
+    # It will generate a response by usingg the chain
     response = chain.apply(
         messages=[HumanMessage(content=user_input)],
         input_documents=docs
     )
 
-    # Parse the response using the MentalHealthResponse model
+    # Parsing the response using the MentalHealthResponse model
     parsed_response = MentalHealthResponse.parse_raw(response.content)
 
     # Add AI response to history
