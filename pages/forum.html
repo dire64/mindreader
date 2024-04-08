@@ -28,49 +28,35 @@ z<!DOCTYPE html>
         </nav>
     </header>
 
-<div class="navigator">
-<a href="../index.html">Home</a>
-<a href="wiki.html">Wiki</a>
-<a class="selected" href="#">Forum</a>
-</div>
- 
-    <div class="header">
-<h1>Welcome to Mental Health Forum</h1>
-</div>
-<main>
-<div class="box">
-<h2>Mental Health Discussion</h2>
-<p>Welcome to the Mental Health Forum where we discuss various topics related to mental well-being, coping strategies, 
-    and support for each other.</p>
-<blockquote>
-<p>It's important to prioritize our mental health and seek help when needed. Remember, you're not alone in this journey.</p>
-<footer class="forum-footer">Mental Health Community, <cite>2024-03-27</cite></footer>
-</blockquote>
-<p>Feel free to share your experiences, ask questions, or offer support to others in the community. 
-    Let's create a safe and supportive environment together.</p>
-</div>
-<div id="chat-widget-icon" onclick="toggleChatWidget()">
-    Chat with us!
-</div>
+    <main>
+
+
+      <div class="forum-embed">
+          <iframe src="https://mankind222.discussion.community/" frameborder="0" width="100%" height="600px"></iframe>
+      </div>
+</main>
 
 <div id="chat-widget">
-    <!-- Chat Button -->
-    <button id="chat-button" onclick="toggleChat()">Chat with us!</button>
-    
-    <!-- Chat Box -->
-    <div id="chat-box" style="display:none;">
-      <div id="chat-box-header">
-        <span>Chat with us!</span>
-        <button onclick="toggleChat()">Close</button>
-      </div>
-      <!--  chat content will be here -->
+  <!-- Chat Button -->
+  <button id="chat-button" onclick="toggleChat()">Chat with us!</button>
+  
+  <!-- Chat Box -->
+  <div id="chat-box" style="display:none;">
+    <div id="chat-box-header">
+      <span>Chat with us!</span>
+      <button onclick="toggleChat()">Close</button>
+    </div>
+    <div id="chat-box-content">
+      <!-- Chat messages will be added here dynamically -->
+    </div>
+    <div id="chat-box-input">
+      <input type="text" id="user-input" placeholder="Type your message...">
+      <button id="send-button" onclick="sendMessage()">Send</button>
     </div>
   </div>
-<div class="sidebar">
-<button class="button">Reply to a comment</button>
-<button class="button">Add a new comment</button>
 </div>
-</main>
+    
+    
 
 <footer class="site-footer">
   <p>Your Mental Health Companion</p>
