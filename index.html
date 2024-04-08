@@ -16,11 +16,11 @@
                 <div class="dropdown">
                     <button class="dropbtn">Get Help</button>
                     <div class="dropdown-content">
-                        <a href="/pages/questionnaire.html">Mental Health Test</a>
-                        <a href="/pages/wiki.html">Learn More</a>
+                        <a href="pages/questionnaire.html">Mental Health Test</a>
+                        <a href="pages/wiki.html">Learn More</a>
                     </div>
                 </div>
-                <a href="/pages/forum.html">Support Forum</a>
+                <a href="pages/forum.html">Support Forum</a>
                 <a href="#mission">Our Mission</a>
                 <a href="#emergency">Find Help Now</a>
                 <a href="#signin">Sign In / Sign Up</a>
@@ -65,7 +65,13 @@
             <span>Chat with us!</span>
             <button onclick="toggleChat()">Close</button>
           </div>
-          <!--  chat content will be here -->
+          <div id="chat-box-content">
+            <!-- Chat messages will be added here dynamically -->
+          </div>
+          <div id="chat-box-input">
+            <input type="text" id="user-input" placeholder="Type your message...">
+            <button id="send-button" onclick="sendMessage()">Send</button>
+          </div>
         </div>
       </div>
 

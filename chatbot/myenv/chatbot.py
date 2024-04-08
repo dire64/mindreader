@@ -26,7 +26,7 @@ text_splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=0)
 all_splits = text_splitter.split_documents(docs)
 
 # We will have to initialize the brain of the chatbot
-chat = ChatOpenAI(model="gpt-3.5-turbo-1106", temperature=0.2, openai_api_key="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")
+chat = ChatOpenAI(model="gpt-3.5-turbo-1106", temperature=1.0, openai_api_key="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")
 # Next we will have to embed and store the chunks in a vector database
 vectorstore = Chroma.from_documents(documents=all_splits, embedding=OpenAIEmbeddings(openai_api_key="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"))
 
@@ -56,7 +56,7 @@ chain = prompt | chat
 message_history = ChatMessageHistory()
 
 def generate_response(user_input):
-    # This will add the user messae to the message history
+    # This will add the user message to the message history
     message_history.add_user_message(user_input)
     
     # This will help retrieve relevant documents based on user input
@@ -65,19 +65,20 @@ def generate_response(user_input):
     # This part will prepare the messages with retrieved documents
     messages = message_history.messages + [HumanMessage(content=doc.page_content) for doc in docs]
 
-    # It will generate a response by usingg the chain
-    response = chain.apply(
-        messages=[HumanMessage(content=user_input)],
-        input_documents=docs
-    )
+    # It will generate a response by using the chat object
+    response = chat(messages)
 
-    # Parsing the response using the MentalHealthResponse model
-    parsed_response = MentalHealthResponse.parse_raw(response.content)
+    # Extract the advice and resources from the response
+    advice = response.content
+    resources = []  # You can extract relevant resources from the response if available
+
+    # Create the response dictionary
+    response_dict = {
+        "advice": advice,
+        "resources": resources
+    }
 
     # Add AI response to history
-    message_history.add_ai_message(parsed_response.json())
+    message_history.add_ai_message(response.content)
 
-    return {
-        "advice": parsed_response.advice,
-        "resources": parsed_response.resources
-    }
+    return response_dict
