@@ -48,7 +48,13 @@
             <span>Chat with us!</span>
             <button onclick="toggleChat()">Close</button>
           </div>
-          <!--  chat content will be here -->
+          <div id="chat-box-content">
+            <!-- Chat messages will be added here dynamically -->
+          </div>
+          <div id="chat-box-input">
+            <input type="text" id="user-input" placeholder="Type your message...">
+            <button id="send-button" onclick="sendMessage()">Send</button>
+          </div>
         </div>
       </div>
 
