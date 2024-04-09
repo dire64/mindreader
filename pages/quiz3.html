@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MindReader - Questionnaire</title>
-    <link rel="stylesheet" href="../styles/questionnaire.css" type="text/css">
+    <title>MindReader - Test your emotional intelligence</title>
+    <link rel="stylesheet" href="../styles/quiz3.css" type="text/css">
 </head>
 <body>
     <header class="site-header">
@@ -23,38 +23,17 @@
                 <a href="/pages/forum.html">Support Forum</a>
                 <a href="#mission">Our Mission</a>
                 <a href="#emergency">Find Help Now</a>
-                
             </div>
         </nav>
     </header>
 
     <main>
-        <section class="quiz-selection">
-        
-            <div class="quiz-container">
-                <a href="quiz1.html">
-                    <img src="../images/quiz1.jpg" alt="Quiz 1">
-                    <h3>How well do you manage stress?</h3>
-                </a>
-            </div>
-            <div class="quiz-container">
-                <a href="quiz2.html">
-                    <img src="../images/quiz2.jpg" alt="Quiz 2">
-                    <h3>How healthy is your friendship?</h3>
-                </a>
-            </div>
-            <div class="quiz-container">
-                <a href="quiz3.html">
-                    <img src="../images/quiz3.webp" alt="Quiz 3">
-                    <h3>Test your emotional intelligence</h3>
-                </a>
-            </div>
-            <div class="quiz-container">
-                <a href="quiz4.html">
-                    <img src="../images/quiz4.jpg" alt="Quiz 4">
-                    <h3>Do you practice enough self-care?</h3>
-                </a>
-            </div>
+        <section class="quiz-container">
+            <h2>Test your emotional intelligence</h2>
+            <form id="quizForm">
+                <!-- Quiz questions will be rendered here -->
+            </form>
+            <div id="result" class="result-container"></div>
         </section>
     </main>
 
@@ -85,7 +64,7 @@
         </div>
     </footer>
 
-    <script src="../scripts/questionnaire.js"></script>
-
+    <script src="../scripts/quiz3.js"></script>
 </body>
+
 </html>

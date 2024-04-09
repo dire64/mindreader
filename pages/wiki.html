@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MindReader Wiki - Your Guide to Mental Health</title>
-    <link rel="stylesheet" href="../styles/quiz1.css" type="text/css">
+    <link rel="stylesheet" href="../styles/wiki.css" type="text/css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
     <header class="site-header">
@@ -14,7 +15,7 @@
             </a>
             <div class="navbar-links">
                 <div class="dropdown">
-                    <button class="dropbtn">Get Help</button>
+                    <button class="dropbtn">Get Help <i class="fas fa-caret-down"></i></button>
                     <div class="dropdown-content">
                         <a href="/pages/questionnaire.html">Mental Health Test</a>
                         <a href="/pages/wiki.html">Learn More</a>
@@ -22,8 +23,7 @@
                 </div>
                 <a href="/pages/forum.html">Support Forum</a>
                 <a href="#mission">Our Mission</a>
-                <a href="#emergency">Find Help Now</a>
-                <a href="#signin">Sign In / Sign Up</a>
+                <a href="#emergency" class="btn btn-primary">Find Help Now</a>
             </div>
         </nav>
     </header>
@@ -32,53 +32,83 @@
         <section class="wiki-intro">
             <h1>Welcome to the MindReader Wiki</h1>
             <p>Explore articles on mental health topics, definitions, learning about strategies, or to find resources</p>
+            <div class="search-bar">
+                <input type="text" placeholder="Search the wiki...">
+                <button><i class="fas fa-search"></i></button>
+            </div>
         </section>
 
         <section class="wiki-categories">
             <h2>Wiki Categories</h2>
             <div class="categories-list">
-                
                 <article class="category">
+                    <i class="fas fa-brain fa-3x"></i>
                     <h3>Understanding Mental Health</h3>
                     <p>Mental Health is something that we all might face one day, so its better to educate ourselves about what effects it could have on the human body</p>
-                    <a href="#">Explore Category</a>
+                    <a href="#">Explore Category <i class="fas fa-arrow-right"></i></a>
                 </article>
-                
+                <article class="category">
+                    <i class="fas fa-heartbeat fa-3x"></i>
+                    <h3>Self-Care Strategies</h3>
+                    <p>Discover effective self-care techniques to improve your mental well-being and manage stress</p>
+                    <a href="#">Explore Category <i class="fas fa-arrow-right"></i></a>
+                </article>
+                <article class="category">
+                    <i class="fas fa-hands-helping fa-3x"></i>
+                    <h3>Support & Resources</h3>
+                    <p>Find support groups, helplines, and resources for getting help with mental health challenges</p>
+                    <a href="#">Explore Category <i class="fas fa-arrow-right"></i></a>
+                </article>
             </div>
         </section>
 
         <section class="featured-articles">
             <h2>Featured Articles</h2>
             <div class="articles-grid">
-               
                 <article class="article-preview">
-                    <h3>Managing Stress</h3>
                     <img src="../images/stress.jpg" alt="Stress Management">
-                    <p>Learn effective techniques to manage day-to-day stress and improve your wellbeing.</p>
-                    <a href="#">Read More</a>
+                    <div class="article-content">
+                        <h3>Managing Stress</h3>
+                        <p>Learn effective techniques to manage day-to-day stress and improve your wellbeing.</p>
+                        <a href="#">Read More <i class="fas fa-arrow-right"></i></a>
+                    </div>
                 </article>
-                
+                <article class="article-preview">
+                    <img src="../images/anxiety.jpg" alt="Understanding Anxiety">
+                    <div class="article-content">
+                        <h3>Understanding Anxiety</h3>
+                        <p>Gain insights into the symptoms, causes, and treatments for anxiety disorders.</p>
+                        <a href="#">Read More <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </article>
+                <article class="article-preview">
+                    <img src="../images/mindfulness.jpg" alt="Mindfulness Meditation">
+                    <div class="article-content">  
+                        <h3>Mindfulness Meditation</h3>
+                        <p>Discover the benefits of mindfulness and learn how to incorporate it into your daily life.</p>
+                        <a href="#">Read More <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </article>
             </div>
         </section>
     </main>
 
-
     <div id="chat-widget">
         <!-- Chat Button -->
-        <button id="chat-button" onclick="toggleChat()">Chat with us!</button>
+        <button id="chat-button" onclick="toggleChat()"><i class="fas fa-comment-alt"></i> Chat with us!</button>
         
         <!-- Chat Box -->
         <div id="chat-box" style="display:none;">
           <div id="chat-box-header">
             <span>Chat with us!</span>
-            <button onclick="toggleChat()">Close</button>
+            <button onclick="toggleChat()"><i class="fas fa-times"></i></button>
           </div>
           <div id="chat-box-content">
             <!-- Chat messages will be added here dynamically -->
           </div>
           <div id="chat-box-input">
             <input type="text" id="user-input" placeholder="Type your message...">
-            <button id="send-button" onclick="sendMessage()">Send</button>
+            <button id="send-button" onclick="sendMessage()"></button>
           </div>
         </div>
       </div>
@@ -90,7 +120,6 @@
         </div>
     </footer>
 
-    <script src="../scripts/quiz1.js"></script>
+    <script src="../scripts/wiki.js"></script>
 </body>
-
 </html>
