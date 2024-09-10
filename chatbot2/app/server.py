@@ -1,5 +1,4 @@
 from fastapi import FastAPI
-from fastapi.responses import RedirectResponse
 from langchain.prompts import ChatPromptTemplate
 from fastapi.middleware.cors import CORSMiddleware
 from langchain.chat_models import ChatOpenAI
