@@ -1,9 +1,0 @@
-langchain
-typings
-flask
-langchain-community
-langchain-core
-beautifulsoup4
-langchain-openai
-chromadb
-flask-cors
