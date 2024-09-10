@@ -13,7 +13,7 @@ trainingString = """Pretend you are a mental health professional who can only
 
 app = FastAPI(
     title = "Mental Health Chatbot",
-    version = "0.1",
+    version = "2.0",
     description = "Mental health chatbot that gives only mental health advice."
 )
 
@@ -26,10 +26,6 @@ app.add_middleware(
     expose_headers=["*"],
 )
 
-@app.get("/")
-async def redirect_root_to_docs():
-    return RedirectResponse("/docs")
-
 model = ChatOpenAI(model = "gpt-3.5-turbo-1106", openai_api_key = "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", temperature = 1.0, max_tokens = 100)
 prompt = ChatPromptTemplate.from_template(trainingString + "{message}")
 
@@ -41,5 +37,4 @@ add_routes(
 
 if __name__ == "__main__":
     import uvicorn
-
     uvicorn.run(app, host="localhost", port=8000)
