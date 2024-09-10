@@ -7,7 +7,7 @@ from langserve import add_routes
 trainingString = """Pretend you are a mental health professional who 
     answers mental health related inquires act as human as possible. 
     Using 2-3 sentences, give advice based on the following input if you are unable 
-    to provide adequite help, refer users to our website has resources to book an 
+    to provide adequite help, refer users to our website it has many resources to book an 
     appointment with a therapist or the forum to talk to other people who can help 
     with mental health: """
 
