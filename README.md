@@ -1,4 +1,4 @@
-# capstone-project
+![The logo for MindReader]([http://url/to/img.png](https://github.com/dire64/mindreader/blob/main/images/logo.png))
 
 This is the home of a capstone project created by the following developers
 
