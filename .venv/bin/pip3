@@ -1,4 +1,4 @@
-#!/Users/jacobrotundo/Documents/GitHub/capstone-project/.venv/bin/python
+#!/Users/jacobrotundo/Documents/GitHub/capstone-project/.venv/bin/python3.12
 # -*- coding: utf-8 -*-
 import re
 import sys
