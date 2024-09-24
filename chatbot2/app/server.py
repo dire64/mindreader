@@ -44,6 +44,30 @@ app.add_middleware(
 model = ChatOpenAI(model = "gpt-3.5-turbo-1106", openai_api_key = "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", temperature = 1.0, max_tokens = 100)
 prompt = ChatPromptTemplate.from_template(trainingString + "{message}")
 
+# This is a function to check for any keywords that involves with a crisis
+def check_crisis(message: str) -> str:
+    crisis = ["suicide", "kill myself", "I want to die", "end my life", "harm myself", "kill"]
+    if any(keyword in message.lower() for keyword in crisis):
+        return """ This appears to be a crisis situation. Please contact emergency services immediately:
+        - Emergency: 911
+        - National Suicide Prevention Lifeline: 1-800-273-8255
+        - Crisis Text Line: Text HOME to 741741
+        
+        Remember, you're not alone, and help is available 24/7. Your life matters."""
+    return ""
+
+# Modify the chat route to include crisis function
+@app.post("/chat")
+async def chat(message: str):
+    response = check_crisis(message)
+    if response:
+        return {"response": response}
+    
+    # If its not a crisis, proceed with the normal chatbot response
+    chain = prompt | model
+    response = await chain.ainvoke({"message": message})
+    return response
+
 add_routes(
     app,
     prompt | model,
