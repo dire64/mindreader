@@ -1,0 +1,72 @@
+definitions:
+  main.ErrorResponse:
+    properties:
+      code:
+        type: integer
+      message:
+        type: string
+    type: object
+  main.professional:
+    properties:
+      address:
+        type: string
+      city:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+    type: object
+info:
+  contact: {}
+  description: API for retreiving professionals used on MindReader.
+  title: MindReader Doctor API
+  version: "1.0"
+paths:
+  /professionals/:
+    get:
+      consumes:
+      - application/json
+      description: Get all available professionals.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.professional'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/main.ErrorResponse'
+      summary: Get Professionals
+      tags:
+      - professionals
+  /professionals/{city}:
+    get:
+      consumes:
+      - application/json
+      description: Get all available professionals in a given city.
+      parameters:
+      - description: City
+        in: path
+        name: city
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/main.professional'
+            type: array
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/main.ErrorResponse'
+      summary: Get Professionals by City
+      tags:
+      - professionals
+swagger: "2.0"
