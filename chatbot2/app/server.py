@@ -3,8 +3,8 @@ from langchain.prompts import ChatPromptTemplate
 from fastapi.middleware.cors import CORSMiddleware
 from langchain.chat_models import ChatOpenAI
 from langserve import add_routes
-from train import trainingString 
-from config import OPENAI_API_KEY
+from app.train import trainingString 
+from app.config import OPENAI_API_KEY
 
 
 app = FastAPI(
