@@ -1,0 +1,255 @@
+/* General Resets */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Arial", sans-serif;
+  line-height: 1.6;
+  overflow-x: hidden;
+  background-color: #f8f8f8;
+}
+
+/* Wiki Intro Section */
+.wiki-intro {
+  padding: 100px 20px 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  text-align: center; /* Center text for mobile readability */
+}
+
+.wiki-intro h1 {
+  margin-bottom: 20px;
+  font-size: 2.5rem;
+}
+
+.wiki-intro p {
+  font-size: 1.2rem;
+  margin-bottom: 40px;
+}
+
+.search-bar {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  max-width: 500px;
+  flex-wrap: wrap; /* Allow inputs to stack on smaller screens */
+}
+
+.search-bar input {
+  width: 70%;
+  padding: 10px;
+  border: none;
+  border-radius: 20px 0 0 20px;
+}
+
+.search-bar button {
+  padding: 10px 20px;
+  background-color: #ff6b6b;
+  color: white;
+  border: none;
+  border-radius: 0 20px 20px 0;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.search-bar button:hover {
+  background-color: #ff4d4d;
+}
+
+/* Wiki Categories Section */
+.wiki-categories {
+  padding: 60px 20px; /* Adjusted padding for smaller screens */
+}
+
+.categories-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  justify-content: center;
+}
+
+.category {
+  flex-basis: 300px;
+  border: 1px solid #ddd;
+  padding: 30px;
+  border-radius: 10px;
+  background: white;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.category:hover {
+  transform: translateY(-5px);
+}
+
+.category i {
+  color: #764ba2;
+  margin-bottom: 20px;
+}
+
+.category h3 {
+  margin-bottom: 15px;
+}
+
+.category p {
+  margin-bottom: 20px;
+}
+
+.category a {
+  display: inline-block;
+  color: #764ba2;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.category a:hover {
+  text-decoration: underline;
+}
+
+/* Featured Articles Section */
+.featured-articles {
+  padding: 60px 20px; /* Adjusted padding for smaller screens */
+  background: #fff;
+}
+
+.articles-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  justify-content: center;
+  margin-top: 40px;
+}
+
+.article-preview {
+  flex-basis: 300px;
+  border: 1px solid #ddd;
+  padding: 30px;
+  border-radius: 10px;
+  background: white;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+  margin-bottom: 40px;
+}
+
+.article-preview:hover {
+  transform: translateY(-5px);
+}
+
+.article-preview img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.article-content {
+  padding: 20px;
+  flex-grow: 1;
+}
+
+.article-content h3 {
+  margin-bottom: 10px;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #333;
+}
+
+.article-content p {
+  margin-bottom: 15px;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #555;
+}
+
+.article-content a {
+  color: #764ba2;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.article-content a:hover {
+  text-decoration: underline;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  /* Adjust the wiki intro section for smaller screens */
+  .wiki-intro {
+    padding: 80px 20px;
+    height: auto; /* Remove fixed height for better mobile adaptability */
+  }
+
+  .wiki-intro h1 {
+    font-size: 2rem; /* Smaller font size for mobile */
+  }
+
+  .wiki-intro p {
+    font-size: 1.1rem;
+  }
+
+  /* Search bar stacking on small screens */
+  .search-bar input {
+    width: 100%;
+    margin-bottom: 10px; /* Add spacing when stacked */
+    border-radius: 20px; /* Full border-radius when stacked */
+  }
+
+  .search-bar button {
+    width: 100%;
+    border-radius: 20px; /* Rounded corners for better aesthetics on mobile */
+  }
+
+  /* Adjust categories section */
+  .category {
+    flex-basis: 100%; /* Full width on smaller screens */
+    padding: 20px; /* Reduce padding on smaller screens */
+  }
+}
+
+@media (max-width: 480px) {
+  /* Further adjustments for very small screens */
+  .wiki-intro {
+    padding: 60px 10px;
+  }
+
+  .wiki-intro h1 {
+    font-size: 1.8rem;
+  }
+
+  .wiki-intro p {
+    font-size: 1rem;
+  }
+
+  /* Adjust featured articles for small screens */
+  .article-preview {
+    flex-basis: 100%; /* Full width on very small screens */
+    padding: 20px;
+  }
+
+  .articles-grid {
+    gap: 20px;
+  }
+
+  .article-content h3 {
+    font-size: 1.3rem;
+  }
+
+  .article-content p {
+    font-size: 0.95rem;
+  }
+
+  .article-content a {
+    font-size: 1rem;
+  }
+}

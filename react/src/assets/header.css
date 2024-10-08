@@ -1,0 +1,213 @@
+/* Header and Navigation Adjustments */
+.site-header {
+  background-color: rgba(0, 0, 0, 0.6);
+  color: white;
+  padding: 1rem 0;
+  position: fixed;
+  width: 100%;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 4px 8px rgb(235, 233, 233);
+  height: 80px;
+}
+
+body,
+.main-content {
+  padding-top: 70px;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 2rem;
+  height: 50px;
+}
+
+/* Ensure logo fits well inside the navbar */
+.navbar .logo img {
+  max-height: 50px;
+}
+
+.navbar-links {
+  display: flex;
+  align-items: center;
+}
+
+.navbar a {
+  color: black;
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  margin-left: 10px;
+  font-weight: 500;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.navbar a:hover {
+  background-color: #00b4d8; /* Light blue hover effect */
+}
+
+/* Dropdown Button Styling */
+.dropdown {
+  position: relative;
+}
+
+.dropdown .dropbtn {
+  background-color: transparent;
+  color: black;
+  font-size: 16px;
+  padding: 0.5rem 1rem;
+  margin-left: 10px;
+  font-weight: 500;
+  border: none;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+  cursor: pointer;
+}
+
+.dropdown .dropbtn:hover {
+  background-color: #00b4d8; /* Same hover effect as other links */
+}
+
+/* Dropdown Menu Styling */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: white;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+  z-index: 1001;
+  top: 60px; /* Align it just below the button */
+  left: 0;
+}
+
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown-content a:hover {
+  background-color: #00b4d8;
+  color: white;
+}
+
+/* Show dropdown when the parent has 'show' class */
+.dropdown-content.show {
+  display: block;
+}
+
+/* Button for Find Help */
+.navbar .btn-primary {
+  background-color: #ff6b6b;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-left: 10px;
+  transition: background-color 0.3s ease;
+}
+
+.navbar .btn-primary:hover {
+  background-color: #ff4757;
+}
+
+.find-help {
+  background-color: #ff6b6b;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  font-weight: bold;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+  margin-left: 10px;
+}
+
+.find-help:hover {
+  background-color: #ff4757;
+  color: #fff;
+}
+
+/* Responsive Layout */
+@media screen and (max-width: 768px) {
+  .navbar {
+    flex-direction: column;
+    align-items: center;
+    padding: 0;
+  }
+
+  .navbar .logo img {
+    max-height: 40px;
+  }
+
+  .navbar-links {
+    flex-direction: column;
+    align-items: center;
+    margin-top: 10px;
+  }
+
+  .navbar a {
+    width: 100%;
+    text-align: center;
+    padding: 15px;
+    margin: 5px 0;
+  }
+
+  .navbar .btn-primary {
+    margin: 10px 0;
+    width: auto;
+  }
+
+  /* Hamburger button for mobile */
+  .hamburger {
+    display: none;
+    font-size: 30px;
+    background: none;
+    border: none;
+    color: black;
+    cursor: pointer;
+  }
+
+  /* Show hamburger button on small screens */
+  @media screen and (max-width: 768px) {
+    .hamburger {
+      display: block;
+      position: absolute;
+      top: 1rem;
+      right: 1.5rem;
+    }
+
+    .navbar-links {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      width: 100%;
+      margin-top: 50px;
+      background-color: rgba(0, 0, 0, 0.8);
+      position: absolute;
+      top: 60px;
+      left: 0;
+    }
+
+    /* Show menu when open */
+    .navbar-links.open {
+      display: flex;
+    }
+
+    .navbar a {
+      width: 100%;
+      padding: 15px;
+      color: white;
+    }
+
+    .navbar a:hover {
+      background-color: #00b4d8;
+      color: white;
+    }
+  }
+}

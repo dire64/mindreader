@@ -1,0 +1,103 @@
+/* DoctorDetails.css */
+
+.doctor-details {
+  max-width: 500px;
+  margin: 100px auto;
+  background-color: #ffffff;
+  padding: 40px;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.doctor-details:hover {
+  transform: scale(1.03);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+}
+
+.doctor-details h1 {
+  margin-bottom: 20px;
+  font-size: 2.5rem;
+  color: #1a1a1a;
+  text-align: center;
+  font-weight: 800;
+}
+
+.doctor-details p {
+  font-size: 1.2rem;
+  color: #666;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.doctor-details form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.doctor-details form label {
+  font-size: 1.15rem;
+  margin-bottom: 10px;
+  color: #333;
+  font-weight: 600;
+}
+
+.doctor-details form input,
+.doctor-details form select {
+  padding: 14px;
+  font-size: 1rem;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  width: 100%;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.doctor-details form input:focus,
+.doctor-details form select:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 10px rgba(0, 123, 255, 0.2);
+  outline: none;
+}
+
+/* Styling both buttons with consistent design */
+.doctor-details form button,
+.doctor-details .close-btn {
+  padding: 14px 20px;
+  font-size: 1.2rem;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 700;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.doctor-details form button:hover,
+.doctor-details .close-btn:hover {
+  background-color: #0056b3;
+  transform: translateY(-3px);
+}
+
+/* Specific styling for the Close button */
+.doctor-details .close-btn {
+  background-color: #f44336;
+  margin-top: 20px;
+}
+
+.doctor-details .close-btn:hover {
+  background-color: #d32f2f;
+}
+
+/* Center the buttons */
+.doctor-details form button {
+  margin-top: 10px;
+  align-self: center;
+}
+
+.doctor-details .close-btn {
+  margin-top: 10px;
+  align-self: center;
+}

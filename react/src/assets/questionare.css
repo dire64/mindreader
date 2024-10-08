@@ -1,0 +1,110 @@
+/* Quiz Container */
+.quiz-container {
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  background-color: #fff;
+  display: flex;
+  flex-direction: column; /* Stack content vertically */
+  justify-content: flex-start; /* Align items at the top */
+  align-items: center; /* Center content horizontally */
+  text-align: center;
+  padding: 0;
+  width: 100%;
+  height: auto; /* Allow height to adjust to content */
+  max-width: 100%; /* Prevent the container from stretching too wide */
+}
+
+.quiz-container img {
+  width: 100%;
+  height: auto; /* Ensure dynamic height based on the image */
+  object-fit: cover;
+  display: block;
+  margin: 0; /* Remove any default margins */
+}
+
+.quiz-container h3 {
+  padding: 0.8rem;
+  background-color: #f7f7f7;
+  color: #333;
+  font-size: 1.2rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+  margin: 0;
+  text-align: center;
+  width: 100%;
+  box-sizing: border-box; /* Ensure padding does not add extra size */
+}
+
+.quiz-container:hover {
+  transform: scale(1.03);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.quiz-container:hover img {
+  transform: scale(1.05);
+  filter: brightness(0.9);
+}
+
+.quiz-container:hover h3 {
+  color: #007bff;
+}
+
+.btn {
+  background: #007bff;
+  color: #fff;
+  padding: 10px 20px;
+  text-decoration: none;
+  border-radius: 8px;
+  display: inline-block;
+  font-size: 0.9rem;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+  align-self: center;
+  margin-bottom: 10px;
+}
+
+/* Grid container for quiz items */
+.quiz-selection {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-gap: 1.5rem;
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 3rem auto;
+  justify-items: center; /* Center items in the grid */
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .quiz-selection {
+    padding: 1.5rem;
+    grid-gap: 1.5rem;
+  }
+
+  .btn {
+    padding: 8px 15px;
+    font-size: 0.85rem;
+  }
+
+  .quiz-container h3 {
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .quiz-selection {
+    padding: 1rem;
+    grid-gap: 1rem;
+  }
+
+  .btn {
+    padding: 7px 12px;
+    font-size: 0.85rem;
+  }
+
+  .quiz-container h3 {
+    font-size: 1rem;
+  }
+}

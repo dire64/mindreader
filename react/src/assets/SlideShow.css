@@ -1,0 +1,132 @@
+/* Slideshow Container */
+.slideshow-container {
+  position: relative;
+  max-width: 1200px;
+  margin: auto;
+  overflow: hidden;
+  padding: 2rem 0;
+  margin-top: 100px;
+}
+
+/* Slideshow Images */
+.mySlides img {
+  width: 100%;
+  height: auto;
+  max-height: 450px;
+  object-fit: cover;
+}
+
+/* Text Styling */
+.text {
+  color: #fff;
+  background-color: rgba(0, 0, 0, 0.8);
+  padding: 16px;
+  font-size: 1.2rem;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+  z-index: 1001;
+}
+
+/* Navigation Buttons */
+.prev,
+.next {
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  width: auto;
+  padding: 16px;
+  margin-top: -30px;
+  color: white;
+  font-weight: bold;
+  font-size: 18px;
+  transition: 0.6s ease;
+  border-radius: 0 3px 3px 0;
+  user-select: none;
+  z-index: 1002;
+}
+
+.next {
+  right: 0;
+  border-radius: 3px 0 0 3px;
+}
+
+.prev {
+  left: 0;
+  border-radius: 3px 0 0 3px;
+}
+
+/* Hover Effects for Navigation Buttons */
+.prev:hover,
+.next:hover {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+/* Dot Container */
+.dot-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  z-index: 1003;
+}
+
+/* Dots */
+.dot {
+  cursor: pointer;
+  height: 15px;
+  width: 15px;
+  margin: 0 5px;
+  background-color: #bbb;
+  border-radius: 50%;
+  display: inline-block;
+  transition: background-color 0.6s ease;
+}
+
+.active,
+.dot:hover {
+  background-color: #717171;
+}
+
+/* Fade Animation */
+.fade {
+  -webkit-animation-name: fade;
+  -webkit-animation-duration: 1.5s;
+  animation-name: fade;
+  animation-duration: 1.5s;
+}
+
+@-webkit-keyframes fade {
+  from {
+    opacity: 0.4;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fade {
+  from {
+    opacity: 0.4;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (max-width: 768px) {
+  .slideshow-container {
+    padding: 1rem 0; /* Reduce padding for mobile */
+    margin-top: 80px; /* Adjust margin */
+  }
+
+  .mySlides img {
+    max-height: 250px; /* Limit image height for mobile */
+    object-fit: cover; /* Ensure it scales properly */
+  }
+
+  .text {
+    font-size: 1rem; /* Smaller text on mobile */
+    padding: 10px; /* Adjust padding */
+  }
+}

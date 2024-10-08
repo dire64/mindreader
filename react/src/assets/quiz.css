@@ -1,0 +1,91 @@
+General Page Layout for Quiz
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f0f4f8;
+  margin: 0;
+  padding: 0;
+}
+
+/* Centering the quiz content in a box without affecting header/footer */
+.quiz-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 80vh; /* Adjust to avoid interfering with footer */
+  padding-top: 80px; /* Offset for fixed header */
+}
+
+/* Centering the quiz box */
+.quiz-box {
+  max-width: 600px;
+  width: 100%;
+  padding: 2rem;
+  background-color: #fff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  text-align: center; /* Centering text */
+}
+
+/* Ensure h3 only applies to quiz questions */
+.quiz-box h3 {
+  font-size: 1.8rem;
+  color: #0077b6; /* Same blue as header */
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+/* Quiz Options Styling */
+.quiz-box label {
+  display: block;
+  margin-bottom: 1.5rem;
+  font-size: 1.2rem;
+  color: #333;
+  cursor: pointer;
+  text-align: left; /* Align labels to the left for clarity */
+}
+
+.quiz-box input[type="radio"] {
+  margin-right: 10px;
+}
+
+.quiz-box input[type="text"] {
+  width: calc(100% - 20px);
+  padding: 0.5rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+  margin-bottom: 1.5rem;
+  text-align: left;
+}
+
+/* Submit Button */
+.quiz-box button {
+  background-color: #0077b6; /* Same blue as header */
+  color: white;
+  padding: 0.8rem 1.2rem;
+  font-size: 1.2rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.quiz-box button:hover {
+  background-color: #00b4d8; /* Light blue hover effect */
+}
+
+/* Result Styling */
+.quiz-result {
+  text-align: center;
+  font-size: 1.5rem;
+  color: #0077b6;
+  margin-top: 2rem;
+}
+
+/* Footer Spacing */
+footer {
+  margin-top: 2rem;
+}

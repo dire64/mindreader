@@ -1,0 +1,289 @@
+/* Global Styles */
+body,
+html {
+  margin: 0;
+  padding: 0;
+  font-family: "Arial", sans-serif;
+  scroll-behavior: smooth;
+  background-color: #f4f7fa;
+  color: #333;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Mission Page Container */
+.mission-page {
+  padding: 0 30px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Section Styling with 3D Effect */
+section {
+  padding: 60px 20px;
+  min-height: 60vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(8px);
+  flex-wrap: wrap;
+  margin: 30px 0;
+}
+
+section:hover {
+  transform: translateY(-5px) scale(1.01);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+/* Intro Section */
+.intro-section {
+  background-color: rgba(245, 246, 248, 0.9);
+  color: #2c3e50;
+  text-align: center;
+}
+
+.intro-section h1 {
+  font-size: 2.5em;
+  margin-bottom: 20px;
+}
+
+.intro-section p {
+  font-size: 1.2em;
+  line-height: 1.7;
+}
+
+/* Vision Section */
+.vision-section {
+  background-color: rgba(230, 236, 240, 0.9);
+  color: #2c3e50;
+  text-align: center;
+}
+
+.vision-section h2 {
+  font-size: 2.2em;
+  margin-bottom: 20px;
+}
+
+.vision-section p,
+.vision-section .goals p {
+  font-size: 1.1em;
+  line-height: 1.6;
+}
+
+/* Focus Areas Section */
+.focus-areas-section {
+  background-color: rgba(255, 255, 255, 0.9);
+  color: #2c3e50;
+  text-align: left;
+}
+
+.focus-areas-section h2 {
+  font-size: 2.2em;
+  margin-bottom: 20px;
+}
+
+.focus-areas-section h3 {
+  font-size: 1.5em;
+  margin-top: 15px;
+}
+
+.focus-areas-section p {
+  font-size: 1.1em;
+  line-height: 1.7;
+}
+
+.focus-areas-section ul {
+  list-style: none;
+  padding: 0;
+}
+
+/* Call-to-Action Section */
+.cta-section {
+  background-color: #f39c12;
+  color: #fff;
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.cta-button {
+  background-color: #fff;
+  color: #e67e22;
+  padding: 12px 25px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1.1em;
+  margin-top: 20px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.cta-button:hover {
+  background-color: #e67e22;
+  color: #fff;
+}
+
+/* Footer Section */
+.footer-section {
+  background: rgba(44, 62, 80, 0.9);
+  color: #ecf0f1;
+  text-align: center;
+  padding: 40px 20px;
+  font-size: 0.9em;
+}
+
+.footer-section p {
+  margin: 0;
+  font-size: 1.1em;
+}
+
+/* Social Media Buttons */
+.social-media-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 50px;
+  margin-top: 20px;
+}
+
+.social-button {
+  display: flex;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #fff;
+  border-radius: 30px;
+  color: #333;
+  font-size: 1rem;
+  font-weight: bold;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.social-button.instagram {
+  background-color: #e4405f;
+  color: #fff;
+}
+
+.social-button.facebook {
+  background-color: #3b5998;
+  color: #fff;
+}
+
+.social-button.twitter {
+  background-color: #55acee;
+  color: #fff;
+}
+
+.social-button:hover {
+  opacity: 0.85;
+}
+
+/* Scroll Animation */
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+section {
+  animation: fadeIn 0.8s ease-in-out;
+}
+
+/* Responsive Design for Tablets */
+@media (max-width: 768px) {
+  .mission-page {
+    padding: 0 15px;
+  }
+
+  section {
+    padding: 50px 15px;
+  }
+
+  .cta-button {
+    padding: 10px 20px;
+    font-size: 1em;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-size: 1.8em;
+  }
+
+  p {
+    font-size: 1em;
+  }
+
+  .social-media-buttons {
+    gap: 20px; /* Reduce gap between social media icons */
+  }
+
+  .social-button {
+    padding: 8px 15px;
+    font-size: 0.9rem;
+  }
+}
+
+/* Responsive Design for Small Devices */
+@media (max-width: 480px) {
+  .mission-page {
+    padding: 0 10px;
+  }
+
+  section {
+    padding: 40px 10px;
+  }
+
+  .cta-button {
+    padding: 8px 18px;
+    font-size: 0.95em;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-size: 1.5em;
+  }
+
+  p {
+    font-size: 0.9em;
+  }
+
+  .social-media-buttons {
+    display: flex;
+    flex-direction: column; /* Stack buttons vertically */
+    justify-content: center; /* Center them vertically */
+    align-items: center; /* Center them horizontally */
+    gap: 20px; /* Space between buttons */
+    margin-top: 20px;
+    height: 100%; /* Ensure it takes up the height of its container */
+  }
+
+  .social-button {
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Ensure text is centered within the button */
+    padding: 10px 20px;
+    background-color: #fff;
+    border-radius: 30px;
+    color: #333;
+    font-size: 1rem;
+    font-weight: bold;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    width: 80%; /* Adjust width if needed */
+    max-width: 300px; /* Ensure buttons don't get too wide */
+    text-align: center;
+  }
+}

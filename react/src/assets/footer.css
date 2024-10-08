@@ -1,0 +1,123 @@
+/* Ensure the body and html take up the full height */
+html,
+body {
+  height: 100%;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  font-family: "Arial", sans-serif; /* Ensure consistent font throughout */
+}
+
+/* Container for all the content */
+#page-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 23vh; /* Full height of the viewport */
+}
+
+/* Main content area */
+#content-wrap {
+  flex-grow: 1; /* This ensures the content area takes available space */
+  padding-bottom: 20px; /* Padding to prevent content from touching the footer */
+}
+
+/* Footer */
+.site-footer {
+  background-color: #0077b6; /* Deep blue background */
+  color: #ffffff; /* White text for contrast */
+  text-align: center;
+  padding: 30px 20px; /* Increased padding for more breathing space */
+  width: 100%; /* Ensure footer takes full width */
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.15); /* Soft shadow for depth */
+  animation: fadeInUp 0.8s ease-out; /* Smooth fade-in effect */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: fixed; /* Ensure footer is placed properly */
+  bottom: 0;
+  margin-top: auto; /* Pushes footer to the bottom only when there's little content */
+}
+
+.footer {
+  font-style: italic;
+  font-size: 1.1em; /* Slightly larger text for better readability */
+  margin-top: 10px; /* Adds space between elements */
+  transition: transform 0.3s ease;
+}
+
+.footer:hover {
+  transform: scale(1.05); /* Slight zoom effect on hover */
+}
+
+/* Social Media Links in Footer */
+.footer-social-links {
+  margin-top: 15px;
+  display: flex;
+  gap: 20px; /* Space between social icons */
+  justify-content: center;
+}
+
+.footer-social-links a {
+  color: #ffffff; /* White color for icons */
+  font-size: 1.5em;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.footer-social-links a:hover {
+  color: #90e0ef; /* Light blue hover color */
+  transform: translateY(-5px); /* Subtle lift on hover */
+}
+
+/* Fade-in effect */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .site-footer {
+    padding: 25px 15px; /* Adjust padding for smaller screens */
+  }
+
+  .footer-social-links a {
+    font-size: 1.3em; /* Reduce size of icons on smaller screens */
+  }
+}
+
+@media (max-width: 480px) {
+  .site-footer {
+    padding: 20px 10px; /* Even tighter padding for mobile */
+  }
+
+  .footer-social-links {
+    gap: 15px; /* Reduce gap between icons on mobile */
+  }
+
+  .footer-social-links a {
+    font-size: 1.2em; /* Adjust icon size on very small screens */
+  }
+}
+
+@media (max-width: 768px) {
+  .site-footer {
+    padding: 20px 10px; /* Adjust padding for mobile */
+    font-size: 0.9rem; /* Slightly smaller text size */
+  }
+
+  .footer-social-links {
+    flex-direction: column; /* Stack icons vertically */
+    gap: 10px; /* Reduce gap between icons */
+  }
+
+  .footer-social-links a {
+    font-size: 1.3rem; /* Reduce size of social media icons */
+  }
+}
