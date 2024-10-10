@@ -107,3 +107,54 @@
   max-width: 80%;
   word-wrap: break-word;
 }
+
+/* User message style */
+.user-message {
+  background-color: #007bff;
+  color: white;
+  align-self: flex-end;
+  margin-left: auto;
+}
+
+/* Bot message style */
+.bot-message {
+  background-color: #f1f1f1;
+  color: black;
+  align-self: flex-start;
+  margin-right: auto;
+}
+
+/* Ensure messages are displayed in a column */
+#chat-box-content {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Add some spacing between messages */
+.chat-message {
+  margin-bottom: 10px;
+}
+
+/* Style for the input when it's focused */
+#chat-box-input input:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 2px rgba(0,123,255,0.25);
+}
+
+/* Improve button accessibility */
+#send-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(0,123,255,0.5);
+}
+
+/* Ensure the chat box doesn't exceed the screen height on smaller devices */
+@media (max-height: 600px) {
+  #chat-widget {
+    max-height: 70vh;
+  }
+  
+  #chat-box-content {
+    max-height: calc(70vh - 120px); /* Adjust based on header and input heights */
+  }
+}
