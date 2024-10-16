@@ -12,12 +12,17 @@ import Mission from "./pages/Mission";
 import DoctorList from "./components/DoctorList";
 import DoctorDetails from "./components/DoctorDetails";
 import Help from "./pages/Help";
+import SignUp from "./pages/SignUp";
+import Login from "./pages/login";
 
 const App = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route index element={<Home />} />
+        <Route index element={<SignUp />} />
+        <Route path="/signUp" element={<SignUp />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/home" element={<Home />} />
         <Route path="/questionnaire" element={<Questionnaire />} />
         <Route path="/forum" element={<Forum />} />
         <Route path="/wiki" element={<Wiki />} />
