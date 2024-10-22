@@ -7,3 +7,5 @@ openai==1.44.1
 langchain-community
 langchain-core
 langchain-google-community
+firebase
+python-dotenv

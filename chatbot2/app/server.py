@@ -1,3 +1,5 @@
+import os
+from dotenv import load_dotenv
 from fastapi import FastAPI, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
@@ -9,8 +11,11 @@ from app.config import OPENAI_API_KEY, GOOGLE_API_KEY, GOOGLE_CSE_ID
 from langchain_core.tools import Tool
 from langchain_google_community import GoogleSearchAPIWrapper
 import random
-import firebase
-from firebase import credentials, firestore, auth
+import firebase_admin
+from firebase_admin import credentials, firestore, auth
+
+# Load environment variables
+load_dotenv()
 
 app = FastAPI(
     title = "Mental Health Chatbot",
@@ -27,9 +32,21 @@ app.add_middleware(
     expose_headers=["*"],
 )
 
-# Initialize Firebase Admin SDK (you'll need to download a service account key)
-cred = credentials.Certificate("C:\Users\GUES\Documents\GitHub\mindreader\chatbot2\login-bf0d1-firebase-adminsdk-b04yw-ef544ab475.json")
-firebase.initialize_app(cred)
+# Initialize Firebase Admin SDK using environment variables
+cred = credentials.Certificate({
+    "type": "service_account",
+    "project_id": os.getenv("FIREBASE_PROJECT_ID"),
+    "private_key_id": os.getenv("FIREBASE_PRIVATE_KEY_ID"),
+    "private_key": os.getenv("FIREBASE_PRIVATE_KEY").replace("\\n", "\n"),
+    "client_email": os.getenv("FIREBASE_CLIENT_EMAIL"),
+    "client_id": os.getenv("FIREBASE_CLIENT_ID"),
+    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+    "token_uri": "https://oauth2.googleapis.com/token",
+    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+    "client_x509_cert_url": os.getenv("FIREBASE_CLIENT_CERT_URL")
+})
+
+firebase_admin.initialize_app(cred)
 db = firestore.client()
 
 model = ChatOpenAI(model = "gpt-3.5-turbo-1106", openai_api_key = OPENAI_API_KEY, temperature = 1.0, max_tokens = 400)
@@ -82,12 +99,16 @@ async def chat(message: str, user_id: str = Depends(verify_token)):
     
     if not user_doc.exists:
         welcome_message = "Welcome to our mental health chatbot! I'm here to provide support and information about mental health. How can I assist you today?"
-        user_ref.set({'name': '', 'chatHistory': []})
+        user_ref.set({
+            'name': '', 
+            'chatHistory': [],
+            'created_at': firestore.SERVER_TIMESTAMP
+        })
         return {"response": welcome_message, "isNewUser": True}
     
     user_data = user_doc.to_dict()
     
-    if user_data['chatHistory']:
+    if user_data.get('chatHistory'):
         last_messages = user_data['chatHistory'][-5:]
         summary = "Based on our last conversation:\n" + "\n".join([f"{'You' if msg['isUser'] else 'Bot'}: {msg['content']}" for msg in last_messages])
         intro = f"Welcome back! {summary}\nHow can I help you further today?"
@@ -97,11 +118,15 @@ async def chat(message: str, user_id: str = Depends(verify_token)):
     chain = prompt | model
     response = await chain.ainvoke({"message": message})
     
+    # Update chat history in Firestore
+    new_messages = [
+        {'content': message, 'isUser': True, 'timestamp': firestore.SERVER_TIMESTAMP},
+        {'content': response['content'], 'isUser': False, 'timestamp': firestore.SERVER_TIMESTAMP}
+    ]
+    
     user_ref.update({
-        'chatHistory': firestore.ArrayUnion([
-            {'content': message, 'isUser': True},
-            {'content': response['content'], 'isUser': False}
-        ])
+        'chatHistory': firestore.ArrayUnion(new_messages),
+        'last_interaction': firestore.SERVER_TIMESTAMP
     })
     
     if Resource(message):
@@ -133,8 +158,36 @@ async def chat_invoke(request: dict):
 @app.post("/update_user_name")
 async def update_user_name(name: str, user_id: str = Depends(verify_token)):
     user_ref = db.collection('users').document(user_id)
-    user_ref.update({'name': name})
+    user_ref.update({
+        'name': name,
+        'updated_at': firestore.SERVER_TIMESTAMP
+    })
     return {"status": "success"}
+
+@app.get("/user_info")
+async def get_user_info(user_id: str = Depends(verify_token)):
+    user_ref = db.collection('users').document(user_id)
+    user_doc = user_ref.get()
+    
+    if not user_doc.exists:
+        return {
+            "is_new_user": True,
+            "name": "",
+            "last_conversation_summary": None
+        }
+    
+    user_data = user_doc.to_dict()
+    last_conversation_summary = None
+    
+    if user_data.get('chatHistory'):
+        last_messages = user_data['chatHistory'][-5:]
+        last_conversation_summary = "\n".join([f"{'You' if msg['isUser'] else 'Bot'}: {msg['content']}" for msg in last_messages])
+    
+    return {
+        "is_new_user": False,
+        "name": user_data.get('name', ''),
+        "last_conversation_summary": last_conversation_summary
+    }
 
 add_routes(
     app,
