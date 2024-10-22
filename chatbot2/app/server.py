@@ -1,11 +1,11 @@
 import os
 from dotenv import load_dotenv
+from pathlib import Path
 from fastapi import FastAPI, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from langchain.prompts import ChatPromptTemplate
 from langchain.chat_models import ChatOpenAI
-from langserve import add_routes
 from app.train import trainingString 
 from app.config import OPENAI_API_KEY, GOOGLE_API_KEY, GOOGLE_CSE_ID
 from langchain_core.tools import Tool
@@ -13,43 +13,69 @@ from langchain_google_community import GoogleSearchAPIWrapper
 import random
 import firebase_admin
 from firebase_admin import credentials, firestore, auth
+from pydantic import BaseModel
 
 # Load environment variables
 load_dotenv()
 
+# Get the directory containing the current file
+current_dir = Path(__file__).parent.absolute()
+
+# Load the .env file from the same directory as this script
+env_path = current_dir / 'secure.env'
+if not env_path.exists():
+    raise FileNotFoundError(f"Please create a .env file at {env_path}")
+
+load_dotenv(env_path)
+
+def get_required_env_var(var_name: str) -> str:
+    value = os.getenv(var_name)
+    if value is None:
+        raise ValueError(f"Environment variable {var_name} is not set in {env_path}")
+    return value
+
+# Pydantic models for request validation
+class ChatRequest(BaseModel):
+    message: str
+
+class UpdateNameRequest(BaseModel):
+    name: str
+
 app = FastAPI(
-    title = "Mental Health Chatbot",
-    version = "2.0",
-    description = "Mental health chatbot that gives only mental health advice."
+    title="Mental Health Chatbot",
+    version="2.0",
+    description="Mental health chatbot that gives only mental health advice."
 )
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["http://localhost:3000"],
     allow_credentials=True,
     allow_methods=["*"],
-    allow_headers=["*"],
-    expose_headers=["*"],
+    allow_headers=["*"]
 )
 
-# Initialize Firebase Admin SDK using environment variables
-cred = credentials.Certificate({
-    "type": "service_account",
-    "project_id": os.getenv("FIREBASE_PROJECT_ID"),
-    "private_key_id": os.getenv("FIREBASE_PRIVATE_KEY_ID"),
-    "private_key": os.getenv("FIREBASE_PRIVATE_KEY").replace("\\n", "\n"),
-    "client_email": os.getenv("FIREBASE_CLIENT_EMAIL"),
-    "client_id": os.getenv("FIREBASE_CLIENT_ID"),
-    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-    "token_uri": "https://oauth2.googleapis.com/token",
-    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-    "client_x509_cert_url": os.getenv("FIREBASE_CLIENT_CERT_URL")
-})
+# Initialize Firebase credentials
+try:
+    cred = credentials.Certificate({
+        "type": "service_account",
+        "project_id": get_required_env_var("FIREBASE_PROJECT_ID"),
+        "private_key_id": get_required_env_var("FIREBASE_PRIVATE_KEY_ID"),
+        "private_key": get_required_env_var("FIREBASE_PRIVATE_KEY").replace("\\n", "\n"),
+        "client_email": get_required_env_var("FIREBASE_CLIENT_EMAIL"),
+        "client_id": get_required_env_var("FIREBASE_CLIENT_ID"),
+        "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+        "token_uri": "https://oauth2.googleapis.com/token",
+        "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+        "client_x509_cert_url": get_required_env_var("FIREBASE_CLIENT_CERT_URL")
+    })
+    firebase_admin.initialize_app(cred)
+    db = firestore.client()
+except Exception as e:
+    print(f"Error initializing Firebase: {str(e)}")
+    raise
 
-firebase_admin.initialize_app(cred)
-db = firestore.client()
-
-model = ChatOpenAI(model = "gpt-3.5-turbo-1106", openai_api_key = OPENAI_API_KEY, temperature = 1.0, max_tokens = 400)
+model = ChatOpenAI(model="gpt-3.5-turbo-1106", openai_api_key=OPENAI_API_KEY, temperature=1.0, max_tokens=400)
 prompt = ChatPromptTemplate.from_template(trainingString + "{message}")
 
 # Set up Google Search
@@ -66,13 +92,13 @@ def verify_token(credentials: HTTPAuthorizationCredentials = Depends(security)):
     try:
         decoded_token = auth.verify_id_token(credentials.credentials)
         return decoded_token['uid']
-    except:
+    except Exception as e:
         raise HTTPException(status_code=401, detail="Invalid authentication credentials")
 
 def check_crisis(message: str) -> str:
     crisis = ["suicide", "kill myself", "I want to die", "end my life", "harm myself", "kill"]
     if any(keyword in message.lower() for keyword in crisis):
-        return """ Your response contains words that have been flagged as concerning. If you're in dire need of help, please contact any of these emergency services down below:
+        return """Your response contains words that have been flagged as concerning. If you're in dire need of help, please contact any of these emergency services down below:
         - Emergency: 911
         - National Suicide Prevention Lifeline: 1-800-273-8255
         - Crisis Text Line: Text HOME to 741741
@@ -88,8 +114,9 @@ def Resource(message: str) -> bool:
         return True
     return False
 
-@app.post("/chat")
-async def chat(message: str, user_id: str = Depends(verify_token)):
+@app.post("/chat/authenticated")
+async def chat(request: ChatRequest, user_id: str = Depends(verify_token)):
+    message = request.message
     crisis_response = check_crisis(message)
     if crisis_response:
         return {"response": crisis_response}
@@ -118,26 +145,40 @@ async def chat(message: str, user_id: str = Depends(verify_token)):
     chain = prompt | model
     response = await chain.ainvoke({"message": message})
     
-    # Update chat history in Firestore
-    new_messages = [
-        {'content': message, 'isUser': True, 'timestamp': firestore.SERVER_TIMESTAMP},
-        {'content': response['content'], 'isUser': False, 'timestamp': firestore.SERVER_TIMESTAMP}
-    ]
+    # Extract content from AIMessage
+    bot_response = response.content if hasattr(response, 'content') else str(response)
     
-    user_ref.update({
-        'chatHistory': firestore.ArrayUnion(new_messages),
-        'last_interaction': firestore.SERVER_TIMESTAMP
-    })
-    
+    # Add resource information if needed
     if Resource(message):
         search_query = f"mental health resources for {message}"
         search_result = search_tool.run(search_query)
         resource_info = f"\n\nHere's a helpful resource: {search_result}"
-        response['content'] += resource_info
+        bot_response += resource_info
 
-    return {"response": intro + "\n\n" + response['content'], "isNewUser": False}
+    # Create new messages without timestamps
+    new_messages = [
+        {
+            'content': message,
+            'isUser': True,
+        },
+        {
+            'content': bot_response,
+            'isUser': False,
+        }
+    ]
 
-@app.post("/chat/invoke")
+    # Get current chat history
+    current_history = user_data.get('chatHistory', [])
+    
+    # Update with new messages
+    user_ref.update({
+        'chatHistory': current_history + new_messages,
+        'last_interaction': firestore.SERVER_TIMESTAMP
+    })
+
+    return {"response": intro + "\n\n" + bot_response, "isNewUser": False}
+
+@app.post("/chat/unauthenticated")
 async def chat_invoke(request: dict):
     message = request['input']['message']
     crisis_response = check_crisis(message)
@@ -147,19 +188,22 @@ async def chat_invoke(request: dict):
     chain = prompt | model
     response = await chain.ainvoke({"message": message})
     
+    # Extract content from AIMessage
+    bot_response = response.content if hasattr(response, 'content') else str(response)
+    
     if Resource(message):
         search_query = f"mental health resources for {message}"
         search_result = search_tool.run(search_query)
         resource_info = f"\n\nHere's a helpful resource: {search_result}"
-        response['content'] += resource_info
+        bot_response += resource_info
 
-    return {"output": response}
+    return {"output": {"content": bot_response}}
 
 @app.post("/update_user_name")
-async def update_user_name(name: str, user_id: str = Depends(verify_token)):
+async def update_user_name(request: UpdateNameRequest, user_id: str = Depends(verify_token)):
     user_ref = db.collection('users').document(user_id)
     user_ref.update({
-        'name': name,
+        'name': request.name,
         'updated_at': firestore.SERVER_TIMESTAMP
     })
     return {"status": "success"}
@@ -188,12 +232,6 @@ async def get_user_info(user_id: str = Depends(verify_token)):
         "name": user_data.get('name', ''),
         "last_conversation_summary": last_conversation_summary
     }
-
-add_routes(
-    app,
-    prompt | model,
-    path="/chat"
-)
 
 if __name__ == "__main__":
     import uvicorn
