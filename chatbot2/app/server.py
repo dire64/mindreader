@@ -74,7 +74,7 @@ except Exception as e:
     print(f"Error initializing Firebase: {str(e)}")
     raise
 
-model = ChatOpenAI(model="gpt-3.5-turbo-1106", openai_api_key=OPENAI_API_KEY, temperature=1.0, max_tokens=400)
+model = ChatOpenAI(model="gpt-4o", openai_api_key=OPENAI_API_KEY, temperature=1.0, max_tokens=400)
 prompt = ChatPromptTemplate.from_template(trainingString + "{message}")
 
 # Set up Google Search
