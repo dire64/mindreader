@@ -1,4 +1,4 @@
-![The logo for MindReader](/images/logo.png)
+![The logo for MindReader](/react/src/assets/logo.png)
 
 This is the home of a capstone project created by the following developers
 
