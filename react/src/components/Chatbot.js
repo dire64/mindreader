@@ -8,7 +8,6 @@ export default function Chatbot() {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const [user, setUser] = useState(null);
-  const [initialMessage, setInitialMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const chatBoxContentRef = useRef(null);
@@ -25,24 +24,26 @@ export default function Chatbot() {
         if (currentUser) {
           setUser(currentUser);
           const userData = await ChatService.getUserData(currentUser.uid);
-          const lastSummary = await ChatService.getLastConversationSummary(
-            currentUser.uid
-          );
-          if (lastSummary) {
-            setInitialMessage(
-              `Welcome back! Here's a summary of our last conversation:\n${lastSummary}\n\nHow can I help you today?`
-            );
+          
+          if (userData.last_conversation_summary) {
+            // Add the summary as the first message
+            setMessages([
+              { text: userData.last_conversation_summary, sender: "bot" }
+            ]);
           } else {
-            setInitialMessage("Welcome! How can I assist you today?");
+            const welcomeMessage = "Welcome! How can I assist you today?";
+            setMessages([{ text: welcomeMessage, sender: "bot" }]);
           }
         } else {
           setUser(null);
-          setInitialMessage(
-            "Welcome to our mental health chatbot! How can I assist you today?"
-          );
+          const welcomeMessage = "Welcome to our mental health chatbot! How can I assist you today?";
+          setMessages([{ text: welcomeMessage, sender: "bot" }]);
         }
       } catch (error) {
+        console.error("Error loading user data:", error);
         setError("Error loading user data");
+        const errorMessage = "Welcome! How can I assist you today?";
+        setMessages([{ text: errorMessage, sender: "bot" }]);
       }
     });
 
@@ -101,17 +102,16 @@ export default function Chatbot() {
       const data = await response.json();
       const botResponse = user ? data.response : data.output.content;
 
+      // Add bot's response to messages
       setMessages((prevMessages) => [
         ...prevMessages,
         { text: botResponse, sender: "bot" },
       ]);
 
-      if (user) {
-        await ChatService.addMessageToHistory(user.uid, userMessage.text, true);
-        await ChatService.addMessageToHistory(user.uid, botResponse, false);
-      }
-
+     
+      
     } catch (error) {
+      console.error("Error sending message:", error);
       setError("Failed to send message. Please try again.");
       setMessages((prevMessages) => [
         ...prevMessages,
@@ -148,10 +148,6 @@ export default function Chatbot() {
           </div>
 
           <div id="chat-box-content" ref={chatBoxContentRef}>
-            {initialMessage && (
-              <div className="chat-message bot-message">{initialMessage}</div>
-            )}
-
             {messages.map((msg, index) => (
               <div
                 key={index}

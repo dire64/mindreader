@@ -10,7 +10,6 @@ from app.train import trainingString
 from app.config import OPENAI_API_KEY, GOOGLE_API_KEY, GOOGLE_CSE_ID
 from langchain_core.tools import Tool
 from langchain_google_community import GoogleSearchAPIWrapper
-import random
 import firebase_admin
 from firebase_admin import credentials, firestore, auth
 from pydantic import BaseModel
@@ -107,12 +106,32 @@ def check_crisis(message: str) -> str:
     return ""
 
 def Resource(message: str) -> bool:
-    info = ["resource", "link", "website", "more information", "where can I find"]
-    if any(keyword in message.lower() for keyword in info):
-        return True
-    if random.random() < 0.5:
-        return True
-    return False
+    info = [
+        "resource", "link", "website", "more information", 
+        "where can I find", "help me find", "looking for",
+        "need information", "can you recommend"
+    ]
+    return any(keyword in message.lower() for keyword in info)
+
+async def generate_conversation_summary(messages):
+    conversation = "\n".join([
+        f"{'User' if msg['isUser'] else 'Assistant'}: {msg['content']}" 
+        for msg in messages
+    ])
+    
+    summary_prompt = ChatPromptTemplate.from_template(
+        "As a mental health chatbot, create a natural, empathetic 2-3 sentence summary of "
+        "this conversation. Focus on the key points discussed and any support provided. "
+        "Make it conversational and highlight the main concerns and advice given:\n\n{conversation}"
+    )
+    
+    try:
+        summary_chain = summary_prompt | model
+        summary_response = await summary_chain.ainvoke({"conversation": conversation})
+        return summary_response.content if hasattr(summary_response, 'content') else str(summary_response)
+    except Exception as e:
+        print(f"Error generating summary: {str(e)}")
+        return None
 
 @app.post("/chat/authenticated")
 async def chat(request: ChatRequest, user_id: str = Depends(verify_token)):
@@ -132,51 +151,45 @@ async def chat(request: ChatRequest, user_id: str = Depends(verify_token)):
             'created_at': firestore.SERVER_TIMESTAMP
         })
         return {"response": welcome_message, "isNewUser": True}
-    
-    user_data = user_doc.to_dict()
-    
-    if user_data.get('chatHistory'):
-        last_messages = user_data['chatHistory'][-5:]
-        summary = "Based on our last conversation:\n" + "\n".join([f"{'You' if msg['isUser'] else 'Bot'}: {msg['content']}" for msg in last_messages])
-        intro = f"Welcome back! {summary}\nHow can I help you further today?"
-    else:
-        intro = "Welcome back! How can I assist you today?"
 
+    # Get model response
     chain = prompt | model
     response = await chain.ainvoke({"message": message})
-    
-    # Extract content from AIMessage
     bot_response = response.content if hasattr(response, 'content') else str(response)
     
     # Add resource information if needed
     if Resource(message):
-        search_query = f"mental health resources for {message}"
-        search_result = search_tool.run(search_query)
-        resource_info = f"\n\nHere's a helpful resource: {search_result}"
-        bot_response += resource_info
+        search_query = f"mental health resources {message}"
+        try:
+            search_result = search_tool.run(search_query)
+            result = search_result.split('\n')[0].strip()
+            if result:
+                resource_info = f'\n\nHere\'s a helpful resource: "{result}"'
+                bot_response += resource_info
+        except Exception as e:
+            pass
 
-    # Create new messages without timestamps
+    # Create new messages
     new_messages = [
-        {
-            'content': message,
-            'isUser': True,
-        },
-        {
-            'content': bot_response,
-            'isUser': False,
-        }
+        {'content': message, 'isUser': True},
+        {'content': bot_response, 'isUser': False}
     ]
 
-    # Get current chat history
+    # Update chat history
+    user_data = user_doc.to_dict()
     current_history = user_data.get('chatHistory', [])
+    updated_history = current_history + new_messages
     
-    # Update with new messages
+    # Generate summary for the updated history
+    summary = await generate_conversation_summary(updated_history[-5:])
+    
     user_ref.update({
-        'chatHistory': current_history + new_messages,
-        'last_interaction': firestore.SERVER_TIMESTAMP
+        'chatHistory': updated_history,
+        'last_interaction': firestore.SERVER_TIMESTAMP,
+        'last_conversation_summary': summary
     })
 
-    return {"response": intro + "\n\n" + bot_response, "isNewUser": False}
+    return {"response": bot_response, "isNewUser": False}
 
 @app.post("/chat/unauthenticated")
 async def chat_invoke(request: dict):
@@ -187,15 +200,18 @@ async def chat_invoke(request: dict):
 
     chain = prompt | model
     response = await chain.ainvoke({"message": message})
-    
-    # Extract content from AIMessage
     bot_response = response.content if hasattr(response, 'content') else str(response)
     
     if Resource(message):
-        search_query = f"mental health resources for {message}"
-        search_result = search_tool.run(search_query)
-        resource_info = f"\n\nHere's a helpful resource: {search_result}"
-        bot_response += resource_info
+        search_query = f"mental health resources {message}"
+        try:
+            search_result = search_tool.run(search_query)
+            result = search_result.split('\n')[0].strip()
+            if result:
+                resource_info = f'\n\nHere\'s a helpful resource: "{result}"'
+                bot_response += resource_info
+        except Exception as e:
+            pass
 
     return {"output": {"content": bot_response}}
 
@@ -221,11 +237,22 @@ async def get_user_info(user_id: str = Depends(verify_token)):
         }
     
     user_data = user_doc.to_dict()
-    last_conversation_summary = None
     
-    if user_data.get('chatHistory'):
+    # Get the stored summary or generate a new one if needed
+    last_conversation_summary = user_data.get('last_conversation_summary')
+    
+    if not last_conversation_summary and user_data.get('chatHistory'):
         last_messages = user_data['chatHistory'][-5:]
-        last_conversation_summary = "\n".join([f"{'You' if msg['isUser'] else 'Bot'}: {msg['content']}" for msg in last_messages])
+        last_conversation_summary = await generate_conversation_summary(last_messages)
+        if last_conversation_summary:
+            user_ref.update({
+                'last_conversation_summary': last_conversation_summary
+            })
+    
+    if last_conversation_summary:
+        last_conversation_summary = f"Welcome back! {last_conversation_summary}\n\nHow can I help you today?"
+    else:
+        last_conversation_summary = "Welcome back! How can I assist you today?"
     
     return {
         "is_new_user": False,
