@@ -77,13 +77,26 @@ except Exception as e:
 model = ChatOpenAI(model="gpt-4o", openai_api_key=OPENAI_API_KEY, temperature=1.0, max_tokens=400)
 prompt = ChatPromptTemplate.from_template(trainingString + "{message}")
 
-# Set up Google Search
-search = GoogleSearchAPIWrapper(google_api_key=GOOGLE_API_KEY, google_cse_id=GOOGLE_CSE_ID)
-search_tool = Tool(
-    name="Google Search",
-    description="Search Google for results on mental health.",
-    func=search.run
+# Set up Google Search with metadata
+search = GoogleSearchAPIWrapper(
+    google_api_key=GOOGLE_API_KEY,
+    google_cse_id=GOOGLE_CSE_ID,
+    k=1
 )
+
+def get_search_result(query: str) -> dict:
+    try:
+        raw_results = search.results(query, num_results=1)
+        if raw_results and len(raw_results) > 0:
+            result = raw_results[0]
+            return {
+                'title': result.get('title', ''),
+                'link': result.get('link', ''),
+                'snippet': result.get('snippet', '')
+            }
+    except Exception as e:
+        print(f"Error in search: {str(e)}")
+    return None
 
 security = HTTPBearer()
 
@@ -114,21 +127,29 @@ def Resource(message: str) -> bool:
     return any(keyword in message.lower() for keyword in info)
 
 async def generate_conversation_summary(messages):
-    conversation = "\n".join([
-        f"{'User' if msg['isUser'] else 'Assistant'}: {msg['content']}" 
-        for msg in messages
-    ])
-    
-    summary_prompt = ChatPromptTemplate.from_template(
-        "As a mental health chatbot, create a natural, empathetic 2-3 sentence summary of "
-        "this conversation. Focus on the key points discussed and any support provided. "
-        "Make it conversational and highlight the main concerns and advice given:\n\n{conversation}"
-    )
-    
     try:
+        conversation_text = "\n".join([
+            f"{'User' if msg['isUser'] else 'Assistant'}: {msg['content']}" 
+            for msg in messages
+        ])
+        
+        summary_prompt = ChatPromptTemplate.from_template(
+            "Create a natural summary that starts exactly with 'In our last conversation' and "
+            "describes the interaction in 2-3 sentences. Focus on the main concerns discussed "
+            "and support provided. Be empathetic and natural. The summary should seamlessly "
+            "continue after 'In our last conversation' and must be cohesive.\n\n"
+            "{conversation}"
+        )
+        
         summary_chain = summary_prompt | model
-        summary_response = await summary_chain.ainvoke({"conversation": conversation})
-        return summary_response.content if hasattr(summary_response, 'content') else str(summary_response)
+        summary_response = await summary_chain.ainvoke({"conversation": conversation_text})
+        summary = summary_response.content if hasattr(summary_response, 'content') else str(summary_response)
+        
+        # Ensure the summary starts with "In our last conversation"
+        if not summary.startswith("In our last conversation"):
+            summary = "In our last conversation " + summary
+            
+        return summary
     except Exception as e:
         print(f"Error generating summary: {str(e)}")
         return None
@@ -157,14 +178,13 @@ async def chat(request: ChatRequest, user_id: str = Depends(verify_token)):
     response = await chain.ainvoke({"message": message})
     bot_response = response.content if hasattr(response, 'content') else str(response)
     
-    # Add resource information if needed
+    # Add resource information 
     if Resource(message):
         search_query = f"mental health resources {message}"
         try:
-            search_result = search_tool.run(search_query)
-            result = search_result.split('\n')[0].strip()
+            result = get_search_result(search_query)
             if result:
-                resource_info = f'\n\nHere\'s a helpful resource: "{result}"'
+                resource_info = f'\n\nHere\'s a helpful resource: [{result["title"]}]({result["link"]})'
                 bot_response += resource_info
         except Exception as e:
             pass
@@ -175,19 +195,28 @@ async def chat(request: ChatRequest, user_id: str = Depends(verify_token)):
         {'content': bot_response, 'isUser': False}
     ]
 
-    # Update chat history
+    # Making sure to update chat history and generate summary
     user_data = user_doc.to_dict()
     current_history = user_data.get('chatHistory', [])
     updated_history = current_history + new_messages
     
-    # Generate summary for the updated history
-    summary = await generate_conversation_summary(updated_history[-5:])
-    
-    user_ref.update({
-        'chatHistory': updated_history,
-        'last_interaction': firestore.SERVER_TIMESTAMP,
-        'last_conversation_summary': summary
-    })
+    try:
+        # Generating summary from the last few messages
+        last_messages = updated_history[-5:]
+        summary = await generate_conversation_summary(last_messages)
+        
+        # Updating Firestore with new history and summary
+        user_ref.update({
+            'chatHistory': updated_history,
+            'last_interaction': firestore.SERVER_TIMESTAMP,
+            'last_conversation_summary': summary
+        })
+    except Exception as e:
+        print(f"Error updating chat history: {str(e)}")
+        user_ref.update({
+            'chatHistory': updated_history,
+            'last_interaction': firestore.SERVER_TIMESTAMP
+        })
 
     return {"response": bot_response, "isNewUser": False}
 
@@ -205,10 +234,9 @@ async def chat_invoke(request: dict):
     if Resource(message):
         search_query = f"mental health resources {message}"
         try:
-            search_result = search_tool.run(search_query)
-            result = search_result.split('\n')[0].strip()
+            result = get_search_result(search_query)
             if result:
-                resource_info = f'\n\nHere\'s a helpful resource: "{result}"'
+                resource_info = f'\n\nHere\'s a helpful resource: [{result["title"]}]({result["link"]})'
                 bot_response += resource_info
         except Exception as e:
             pass
@@ -237,27 +265,30 @@ async def get_user_info(user_id: str = Depends(verify_token)):
         }
     
     user_data = user_doc.to_dict()
-    
-    # Get the stored summary or generate a new one if needed
     last_conversation_summary = user_data.get('last_conversation_summary')
     
     if not last_conversation_summary and user_data.get('chatHistory'):
-        last_messages = user_data['chatHistory'][-5:]
-        last_conversation_summary = await generate_conversation_summary(last_messages)
-        if last_conversation_summary:
-            user_ref.update({
-                'last_conversation_summary': last_conversation_summary
-            })
+        try:
+            last_messages = user_data['chatHistory'][-5:]
+            last_conversation_summary = await generate_conversation_summary(last_messages)
+            if last_conversation_summary:
+                user_ref.update({
+                    'last_conversation_summary': last_conversation_summary
+                })
+        except Exception as e:
+            print(f"Error generating summary: {str(e)}")
+            last_conversation_summary = None
     
+    # Formatting the response with greeting and closing
     if last_conversation_summary:
-        last_conversation_summary = f"Welcome back! {last_conversation_summary}\n\nHow can I help you today?"
+        formatted_summary = f"Hello! {last_conversation_summary}\n\nHow can I assist you today?"
     else:
-        last_conversation_summary = "Welcome back! How can I assist you today?"
+        formatted_summary = "Hello! How can I assist you today?"
     
     return {
         "is_new_user": False,
         "name": user_data.get('name', ''),
-        "last_conversation_summary": last_conversation_summary
+        "last_conversation_summary": formatted_summary
     }
 
 if __name__ == "__main__":

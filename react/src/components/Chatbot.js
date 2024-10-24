@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import "../assets/ChatBot.css";
 import { auth } from "../firebase";
 import { ChatService } from "../ChatService";
+import ReactMarkdown from 'react-markdown';
 
 export default function Chatbot() {
   const [isChatOpen, setIsChatOpen] = useState(false);
@@ -26,7 +27,6 @@ export default function Chatbot() {
           const userData = await ChatService.getUserData(currentUser.uid);
           
           if (userData.last_conversation_summary) {
-            // Add the summary as the first message
             setMessages([
               { text: userData.last_conversation_summary, sender: "bot" }
             ]);
@@ -102,13 +102,10 @@ export default function Chatbot() {
       const data = await response.json();
       const botResponse = user ? data.response : data.output.content;
 
-      // Add bot's response to messages
       setMessages((prevMessages) => [
         ...prevMessages,
         { text: botResponse, sender: "bot" },
       ]);
-
-     
       
     } catch (error) {
       console.error("Error sending message:", error);
@@ -130,6 +127,28 @@ export default function Chatbot() {
       e.preventDefault();
       sendMessage();
     }
+  };
+
+  const renderMessage = (msg) => {
+    if (msg.sender === "bot") {
+      return (
+        <ReactMarkdown
+          components={{
+            a: ({ node, ...props }) => (
+              <a 
+                {...props} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="chat-link"
+              />
+            ),
+          }}
+        >
+          {msg.text}
+        </ReactMarkdown>
+      );
+    }
+    return msg.text;
   };
 
   return (
@@ -156,7 +175,7 @@ export default function Chatbot() {
                   opacity: msg.sending ? 0.7 : 1,
                 }}
               >
-                {msg.text}
+                {renderMessage(msg)}
               </div>
             ))}
 

@@ -124,6 +124,31 @@
   margin-right: auto;
 }
 
+/* Link styles for chat messages */
+.chat-link {
+  color: #007bff;
+  text-decoration: none;
+  word-break: break-word;
+  transition: color 0.3s ease;
+}
+
+.chat-link:hover {
+  text-decoration: underline;
+  color: #0056b3;
+}
+
+.bot-message a {
+  color: #007bff;
+  text-decoration: none;
+  transition: color 0.3s ease;
+  font-weight: 500;
+}
+
+.bot-message a:hover {
+  text-decoration: underline;
+  color: #0056b3;
+}
+
 /* Ensure messages are displayed in a column */
 #chat-box-content {
   display: flex;
@@ -148,14 +173,14 @@
   box-shadow: 0 0 0 2px rgba(0,123,255,0.5);
 }
 
-/* Ensure the chat box doesn't exceed the screen height on smaller devices */
+/* Responsive design */
 @media (max-height: 600px) {
   #chat-widget {
     max-height: 70vh;
   }
   
   #chat-box-content {
-    max-height: calc(70vh - 120px); /* Adjust based on header and input heights */
+    max-height: calc(70vh - 120px);
   }
 }
 
@@ -212,7 +237,7 @@
   cursor: not-allowed;
 }
 
-/* Textarea styling (replacing input) */
+/* Textarea styling */
 #user-input {
   flex-grow: 1;
   padding: 8px;
@@ -258,4 +283,24 @@
 #user-input:focus-visible {
   outline: 2px solid #007bff;
   outline-offset: 2px;
+}
+
+/* Link container styles */
+.bot-message p {
+  margin: 0;
+  padding: 0;
+}
+
+/* Resource link specific styles */
+.bot-message a[href^="http"] {
+  display: inline-block;
+  margin-top: 5px;
+  padding: 5px 10px;
+  background-color: rgba(0, 123, 255, 0.1);
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.bot-message a[href^="http"]:hover {
+  background-color: rgba(0, 123, 255, 0.2);
 }
